@@ -1,0 +1,86 @@
+.TeamBlock {
+    margin-bottom: 1rem;
+    transition: background-color 0.3s ease, all 0.3s ease-in-out;
+    overflow: hidden;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 0.5rem;
+    position: relative;
+    text-align: center;
+    height: auto;
+    line-height: normal;
+}
+
+.TeamBlock:hover {
+    background-color: #f0f0f0;
+}
+
+.TeamBlock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    text-align: center;
+    color: black;
+}
+
+.TeamBlock-content {
+    margin-top: 0.5rem;
+    transition: max-height 0.5s ease-in-out;
+    overflow: hidden;
+    max-height: 0;
+}
+
+.TeamBlock.expanded .TeamBlock-content {
+    max-height: 1000px;
+    opacity: 1;
+    padding-top: 0.5rem;
+}
+
+.TeamBlock::after {
+    content: '↓';
+    font-size: 1rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.TeamBlock.expanded::after {
+    content: '';
+}
+
+.TeamBlock:hover::after {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+}
+
+.TeamBlock-content:hover ~ .TeamBlock::after {
+    opacity: 0 !important;
+}
+
+.TeamBlock:not(.expanded)::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 0%;
+    background: #26A69A;
+    transition: height 0.3s ease;
+    z-index: 1;
+    pointer-events: none;
+}
+
+.TeamBlock:not(.expanded):not(.collapsing):hover::before {
+    height: 100%;
+}

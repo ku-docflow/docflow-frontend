@@ -1,0 +1,44 @@
+.main-layout {
+    display: flex;
+    height: 100%;
+}
+
+.org-strip {
+    width: 4rem;
+    /* equivalent to Tailwind's w-16 */
+    background-color: white;
+    color: black;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    border-right: 1px solid black;
+}
+
+.channel-strip {
+    width: 15rem;
+    background-color: white;
+    color: black;
+    border-right: 1px solid black;
+}
+
+.chat-area {
+    flex: 1;
+    background-color: white;
+    color: black;
+    border-right: 1px solid black;
+}
+
+.chat-area-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    color: #888;
+}
+
+.searchbot-strip {
+    width: 20rem;
+    /* equivalent to Tailwind's w-80 */
+    background-color: white;
+    color: black;
+}

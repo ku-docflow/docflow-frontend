@@ -1,0 +1,31 @@
+.chat-channel-strip {
+    padding: 1rem;
+    background-color: white;
+    color: black;
+    height: 100%;
+}
+
+.chat-channel-title {
+    font-size: 1.125rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.chat-channel-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.chat-channel-item {
+    padding: 0.5rem;
+    background-color: white;
+    border: 1px solid black;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.chat-channel-item:hover {
+    background-color: #f0f0f0;
+}

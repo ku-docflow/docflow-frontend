@@ -1,0 +1,13 @@
+.main-page-container {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.main-page-content {
+    flex: 1;
+    padding-top: 4rem;
+    /* exactly matches header height */
+    overflow: hidden;
+}

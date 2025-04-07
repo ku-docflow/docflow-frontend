@@ -1,0 +1,146 @@
+/* Overall chat bubble container with fade in animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.chat-bubble-animate {
+    animation: fadeInUp 0.4s ease-out both;
+}
+
+/* Wrapper for each chat bubble, arranging profile and bubble side by side */
+.chat-bubble-wrapper {
+    margin-bottom: 0.5rem;
+    animation: fadeInUp 0.4s ease-out both;
+    display: flex;
+    align-items: flex-end;
+}
+
+/* Align wrapper based on sender */
+.chat-bubble-wrapper.align-right {
+    justify-content: flex-end;
+}
+
+.chat-bubble-wrapper.align-left {
+    justify-content: flex-start;
+}
+
+/* Profile image container positioned outside the bubble */
+.chat-bubble-profile {
+    cursor: pointer;
+    display: inline-block;
+}
+
+.chat-bubble-wrapper.align-left .chat-bubble-profile {
+    margin-right: 8px;
+}
+
+.chat-bubble-wrapper.align-right .chat-bubble-profile {
+    margin-left: 8px;
+}
+
+/* Profile image styling */
+.chat-bubble-profile img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+}
+
+/* Placeholder styling when no profile image is provided */
+.chat-bubble-placeholder {
+    width: 32px;
+    height: 32px;
+    background-color: #ccc;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Container for the chat bubble (message) itself */
+.chat-bubble-container {
+    display: flex;
+    flex-direction: column;
+    max-width: 60%;
+}
+
+/* Chat bubble styling */
+.chat-bubble {
+    padding: 10px;
+    border-radius: 10px;
+    position: relative;
+    word-wrap: break-word;
+    font-family: sans-serif;
+    display: inline-block;
+}
+
+/* Chat bubble color variations */
+.chat-bubble.right {
+    background-color: #158ffe;
+    color: white;
+}
+
+.chat-bubble.left {
+    background-color: #e6e5eb;
+    color: #000;
+}
+
+/* Tails for chat bubbles */
+.chat-bubble.left:before {
+    content: "";
+    position: absolute;
+    bottom: 10px;
+    left: -8px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-right: 10px solid #e6e5eb;
+    border-bottom: 10px solid transparent;
+}
+
+.chat-bubble.right:before {
+    content: "";
+    position: absolute;
+    bottom: 10px;
+    right: -8px;
+    width: 0;
+    height: 0;
+    border-top: 10px solid transparent;
+    border-left: 10px solid #158ffe;
+    border-bottom: 10px solid transparent;
+}
+
+/* Content inside the chat bubble */
+.chat-bubble-content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sender name styling */
+.chat-bubble-sender {
+    font-size: 0.85em;
+    margin-bottom: 4px;
+    font-weight: bold;
+}
+
+/* Message text styling */
+.chat-bubble-message {
+    font-size: 1em;
+}
+
+/* Timestamp always at bottom right */
+.chat-bubble-timestamp {
+    font-size: 0.75em;
+    text-align: right;
+    margin-top: 4px;
+    opacity: 0.7;
+}

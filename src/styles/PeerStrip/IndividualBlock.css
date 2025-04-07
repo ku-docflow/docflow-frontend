@@ -1,0 +1,86 @@
+.IndividualBlock {
+    position: relative;
+    /* Enable positioning for pseudo-elements */
+    overflow: hidden;
+    /* Hide overflowing pseudo-elements */
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    line-height: normal;
+    margin-bottom: 8px;
+}
+
+.IndividualBlock.online {
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.IndividualBlock.offline {
+    background-color: transparent;
+}
+
+/* Left-to-right sliding overlay */
+.IndividualBlock::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 100%;
+    background: rgba(38, 166, 154, 1);
+    /* Semi-transparent overlay color */
+    transition: width 0.3s ease;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.IndividualBlock:hover::before {
+    width: 100%;
+}
+
+/* Right-pointing arrow overlay */
+.IndividualBlock::after {
+    content: 'Message →';
+    font-size: 1rem;
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.IndividualBlock:hover::after {
+    transform: translate(-50%, -50%) translateX(100%);
+    opacity: 1;
+}
+
+.IndividualBlock__indicator {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    z-index: 2;
+}
+
+.IndividualBlock__indicator.online {
+    background-color: limegreen;
+}
+
+.IndividualBlock__indicator.offline {
+    background-color: gray;
+}
+
+.IndividualBlock__name {
+    color: #000000;
+    font-size: 14px;
+    z-index: 2;
+    /* Bring text above overlay */
+}

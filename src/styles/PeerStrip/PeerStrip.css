@@ -1,0 +1,31 @@
+.peer-strip {
+   padding: 1rem;
+   height: 100%;
+   overflow-y: auto;
+   background-color: white;
+   color: black;
+   border-right: 1px solid black;
+ }
+ 
+ .peer-strip-title {
+   font-size: 1.125rem;
+   font-weight: 600;
+   margin-bottom: 0.5rem;
+   border-bottom: 1px solid #ccc;
+ }
+ 
+.organization-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  /* Hide scrollbar for IE, Edge and Firefox */
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Hide scrollbar for WebKit-based browsers */
+.organization-list::-webkit-scrollbar {
+  display: none;
+}

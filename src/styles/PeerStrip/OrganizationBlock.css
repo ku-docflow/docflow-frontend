@@ -1,0 +1,92 @@
+/* src/styles/OrganizationBlock.css */
+.OrganizationBlock {
+    margin-bottom: 1rem;
+    transition: background-color 0.3s ease, all 0.3s ease-in-out;
+    overflow: hidden;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 0.5rem;
+    position: relative;
+    text-align: center;
+    height: auto; /* 전체 블록 영역에 대한 확장을 위해 height: auto 사용 */
+    line-height: normal;
+}
+
+.OrganizationBlock:hover {
+    background-color: #f0f0f0;
+}
+
+/* OrganizationBlock의 헤더 */
+.OrganizationBlock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    font-weight: bold;
+    transition: height 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    text-align: center;
+    color: black;
+}
+
+/* 확장/접힘되는 내부 콘텐츠 영역 */
+.OrganizationBlock-content {
+    margin-top: 0.5rem;
+    transition: max-height 0.5s ease-in-out;
+    overflow: hidden;
+    max-height: 0;
+}
+
+/* .expanded 클래스가 추가되면 내부 콘텐츠가 확장됨 */
+.OrganizationBlock.expanded .OrganizationBlock-content {
+    max-height: 1000px;
+    opacity: 1;
+    padding-top: 0.5rem;
+    /* 충분히 큰 값, 실제 콘텐츠 높이에 맞게 조정 */
+}
+
+.OrganizationBlock::after {
+    content: '↓';
+    font-size: 1rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -100%);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 1;
+    pointer-events: none; /* 추가: 포인터 이벤트를 무시하여 클릭 가능성 방지 */
+}
+
+.OrganizationBlock.expanded::after {
+    content: ''; /* 추가: .expanded 클래스가 있을 때 화살표 변경 */
+}
+
+.OrganizationBlock:hover::after {
+    transform: translate(-50%, -50%);
+    opacity: 1;
+}
+
+.OrganizationBlock-content:hover ~ .OrganizationBlock::after {
+    opacity: 0 !important; /* 추가: .OrganizationBlock-content를 호버할 때 화살표 숨기기 */
+}
+
+/* 추가: 블록이 확장되지 않았을 때 활성화되는 ::before 오버레이 애니메이션 */
+.OrganizationBlock:not(.expanded)::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: #26A69A;
+  transition: height 0.3s ease;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.OrganizationBlock:not(.expanded):not(.collapsing):hover::before {
+    height: 100%;
+}

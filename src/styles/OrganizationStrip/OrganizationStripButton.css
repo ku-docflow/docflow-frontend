@@ -1,0 +1,78 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:700');
+
+.OrganizationStripButton {
+  background: white;
+  width: 3rem;
+  height: 3rem;
+  overflow: hidden;
+  text-align: center;
+  transition: 0.2s;
+  cursor: pointer;
+  border-radius: 10px;
+  box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.2);
+  position: relative;
+  font-family: 'Roboto', sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: black;
+  border: 1px solid black;
+  flex-shrink: 0;
+}
+
+/* 좌측 오버레이 */
+.OrganizationStripButton::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 100%;
+  background: #26A69A;
+  transition: width 0.3s ease;
+  z-index: 0;
+}
+
+/* hover 시 오버레이 전체 확장 */
+.OrganizationStripButton:hover::before {
+  width: 100%;
+}
+
+/* 기본 텍스트 스타일과 hover 시 오른쪽 이동 */
+.OrganizationStripButton .btnText {
+  color: black;
+  transition: transform 0.3s ease;
+  position: relative;
+  z-index: 1;
+  line-height: 3rem;
+}
+
+.OrganizationStripButton:hover .btnText {
+  transform: translateX(100%);
+}
+
+/* 초기: 화살표는 버튼 오른쪽 밖에 위치 */
+.OrganizationStripButton::after {
+  content: '➔';
+  position: absolute;
+  left: -100%;
+  top: 50%;
+  transform: translateX(-100%) translateY(-50%);
+  color: black;
+  font-size: 1rem;
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+  z-index: 2;
+}
+
+/* hover 시: 화살표가 버튼 중앙으로 슬라이드되며 나타남 */
+.OrganizationStripButton:hover::after {
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  opacity: 1;
+}
+
+.OrganizationStripButton:active {
+  box-shadow: 0px 5px 6px rgba(0, 0, 0, 0.3);
+}
+

@@ -1,0 +1,14 @@
+.searchbot-strip {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    background-color: white;
+    color: black;
+}
+
+.searchbot-strip-header {
+    padding: 1rem;
+    border-bottom: 1px solid #ccc;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
