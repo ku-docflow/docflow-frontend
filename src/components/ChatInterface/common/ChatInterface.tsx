@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, FormEvent } from "react";
 import ChatBubble, { Sender } from "./ChatBubbles";
-import "../../styles/common/ChatInterface.css"; // Optional: add styles for the chat interface container
+import "../../../styles/ChatInterface/common/ChatInterface.css"; // Optional: add styles for the chat interface container
 
 interface Message {
   id: string;

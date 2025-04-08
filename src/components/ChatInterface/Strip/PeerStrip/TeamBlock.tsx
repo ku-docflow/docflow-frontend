@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import "../../../styles/PeerStrip/TeamBlock.css"; // Import the CSS file
-import InteractionGuard from "../../common/InteractionGuard";
+import "../../../../styles/ChatInterface/PeerStrip/TeamBlock.css"; // Import the CSS file
+import InteractionGuard from "../../../common/InteractionGuard";
 import IndividualBlock from "./IndividualBlock";
 
 interface Peer {

@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import '../styles/Layout/MainLayout.css';
-import OrganizationStrip from "../components/Strip/OrganizationStrip/OrganizationStrip";
-import PeerStrip from "../components/Strip/PeerStrip/PeerStrip";
-import ChatChannelStrip from "../components/Strip/ChatChannelStrip";
-import Dashboard from "../components/common/Dashboard";
-import ChatRoomStrip from "../components/Strip/ChatRoomStrip";
-import SearchbotStrip from "../components/Strip/SearchbotStrip";
+import '../styles/ChatInterface/Layout/MainLayout.css';
+import OrganizationStrip from "../components/ChatInterface/Strip/OrganizationStrip/OrganizationStrip";
+import PeerStrip from "../components/ChatInterface/Strip/PeerStrip/PeerStrip";
+import ChatChannelStrip from "../components/ChatInterface/Strip/ChatChannelStrip";
+import Dashboard from "../components/ChatInterface/common/Dashboard";
+import ChatRoomStrip from "../components/ChatInterface/Strip/ChatRoomStrip";
+import SearchbotStrip from "../components/ChatInterface/Strip/SearchbotStrip";
 
 interface MainLayoutProps {
   children?: React.ReactNode;

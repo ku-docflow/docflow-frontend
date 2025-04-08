@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { auth } from '../../services/firebase';
+import { auth } from '../../../services/firebase';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import '../../styles/SignUpForm.css';
+import '../../../styles/ChatInterface/SignUpForm.css';
 
 const SignUpForm: React.FC = () => {
   // Track current step (0, 1, 2)

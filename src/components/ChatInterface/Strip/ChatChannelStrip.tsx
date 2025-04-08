@@ -1,6 +1,6 @@
 // src/components/ChatChannelStrip.tsx
 import React from "react";
-import "../../styles/ChatChannelStrip.css";
+import "../../../styles/ChatInterface/ChatChannelStrip.css";
 
 interface ChatChannelStripProps {
   orgId: string;

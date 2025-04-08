@@ -1,6 +1,6 @@
 import React from "react";
 import ChatInterface from "../common/ChatInterface";
-import "../../styles/SearchbotStrip.css";
+import "../../../styles/ChatInterface/SearchbotStrip.css";
 
 const SearchbotStrip: React.FC = () => {
   return (

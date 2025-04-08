@@ -1,0 +1,32 @@
+.markdown-strip {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: #333;
+    line-height: 1.6;
+}
+
+.markdown-strip h1,
+.markdown-strip h2,
+.markdown-strip h3 {
+    border-bottom: 1px solid #ccc;
+    padding-bottom: 0.3rem;
+    margin-bottom: 1rem;
+    margin-top: 2rem;
+}
+
+.markdown-strip p {
+    margin: 1rem 0;
+}
+
+.markdown-strip code {
+    background-color: #f4f4f4;
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+}
+
+.markdown-strip pre {
+    background-color: #272822;
+    color: #f8f8f2;
+    padding: 1rem;
+    border-radius: 6px;
+    overflow-x: auto;
+}

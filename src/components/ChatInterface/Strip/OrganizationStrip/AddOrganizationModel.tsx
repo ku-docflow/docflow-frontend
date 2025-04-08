@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../../styles/OrganizationStrip/AddOrganizationModal.css";
+import "../../../../styles/ChatInterface/OrganizationStrip/AddOrganizationModal.css";
 
 interface AddOrganizationModalProps {
   isOpen: boolean;

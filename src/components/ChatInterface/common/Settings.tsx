@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../styles/common/Settings.css"; // Optional: add styles for the settings modal
+import "../../../styles/ChatInterface/common/Settings.css"; // Optional: add styles for the settings modal
 
 interface SettingsProps {
   onClose: () => void;

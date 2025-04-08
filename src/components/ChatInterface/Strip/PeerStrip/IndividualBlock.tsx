@@ -1,5 +1,5 @@
 import React from "react";
-import "../../../styles/PeerStrip/IndividualBlock.css";
+import "../../../../styles/ChatInterface/PeerStrip/IndividualBlock.css";
 
 export interface Individual {
   id: string;

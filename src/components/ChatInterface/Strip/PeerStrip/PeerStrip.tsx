@@ -1,6 +1,6 @@
 import React from "react";
 import OrganizationBlock from "./OrganizationBlock";
-import "../../../styles/PeerStrip/PeerStrip.css";
+import "../../../../styles/ChatInterface/PeerStrip/PeerStrip.css";
 
 interface Peer {
   id: string;

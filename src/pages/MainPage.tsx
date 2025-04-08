@@ -1,7 +1,7 @@
 import React from "react";
 import Header from "../components/common/Header";
 import MainLayout from "../layouts/MainLayout";
-import "../styles/pages/MainPage.css";
+import "../styles/ChatInterface/pages/MainPage.css";
 
 const MainPage: React.FC = () => {
   return (

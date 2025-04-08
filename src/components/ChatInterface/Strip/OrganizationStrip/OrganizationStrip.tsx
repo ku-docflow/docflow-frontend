@@ -1,6 +1,6 @@
 import React, {useState} from "react";
-import '../../../styles/OrganizationStrip/OrganizationStripButton.css';
-import '../../../styles/OrganizationStrip/OrganizationStrip.css';
+import '../../../../styles/ChatInterface/OrganizationStrip/OrganizationStripButton.css';
+import '../../../../styles/ChatInterface/OrganizationStrip/OrganizationStrip.css';
 import Settings from '../../common/Settings';
 import AddOrganizationModal from "./AddOrganizationModel";
 

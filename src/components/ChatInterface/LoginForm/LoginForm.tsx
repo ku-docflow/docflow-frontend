@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { auth } from "../../services/firebase";
+import { auth } from "../../../services/firebase";
 import { useNavigate } from "react-router-dom";
-import '../../styles/LoginForm.css';
+import '../../../styles/ChatInterface/LoginForm.css';
 
 const LoginForm: React.FC = () => {
   const [email, setEmail] = useState("");

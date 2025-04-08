@@ -1,5 +1,5 @@
 import React from "react";
-import "../../styles/common/ChatBubbles.css";
+import "../../../styles/ChatInterface/common/ChatBubbles.css";
 
 export interface Sender {
   id: string;

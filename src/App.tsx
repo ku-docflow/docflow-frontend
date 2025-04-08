@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import MainPage from "./pages/MainPage";
+import WikiPage from "./pages/WikiPage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 
 function App() {
@@ -20,6 +21,7 @@ function App() {
             </ProtectedRoute>
           }
         />
+        <Route path="/wiki" element={<WikiPage />} />
       </Routes>
     </BrowserRouter>
   );

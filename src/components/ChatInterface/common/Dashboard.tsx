@@ -1,6 +1,6 @@
 // src/components/Dashboard.tsx
 import React from "react";
-import "../../styles/Dashboard.css";
+import "../../../styles/ChatInterface/Dashboard.css";
 
 const Dashboard: React.FC = () => {
   return (

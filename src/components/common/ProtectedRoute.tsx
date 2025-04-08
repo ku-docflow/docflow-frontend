@@ -1,7 +1,7 @@
 import React, { JSX } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import "../../styles/common/Spinner.css";
+import "../../styles/ChatInterface/common/Spinner.css";
 
 interface ProtectedRouteProps {
   children: JSX.Element;
