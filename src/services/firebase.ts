@@ -8,13 +8,19 @@ import { getAuth } from "firebase/auth";
 // Your web app's Firebase configuration
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
-  apiKey: "AIzaSyAp28xtJ73y-IQB8XoHienodB-ezs6HGxY",
-  authDomain: "docflow-f28ab.firebaseapp.com",
-  projectId: "docflow-f28ab",
-  storageBucket: "docflow-f28ab.firebasestorage.app",
-  messagingSenderId: "284206234641",
-  appId: "1:284206234641:web:a7162c156203431f7f05b0",
-  measurementId: "G-B9TVPXSH46",
+  apiKey: "AIzaSyCmj90nWtGqEnYiXSe2F9qqxZVxgA4WKuw",
+
+  authDomain: "docflow-dd375.firebaseapp.com",
+
+  projectId: "docflow-dd375",
+
+  storageBucket: "docflow-dd375.firebasestorage.app",
+
+  messagingSenderId: "497732990186",
+
+  appId: "1:497732990186:web:77792c396a86ef84191393",
+
+  measurementId: "G-YZE9EPMX1X",
 };
 
 // Initialize Firebase

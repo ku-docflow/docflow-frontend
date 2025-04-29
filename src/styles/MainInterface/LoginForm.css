@@ -1,0 +1,122 @@
+.login-container {
+    font-family: 'Montserrat', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Login Card */
+.login-card {
+    background: white;
+    padding: 30px 40px;
+    border-radius: 5px;
+    box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+}
+
+/* Headings */
+.login-card h2 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #2C3E50;
+}
+
+/* Input Fields */
+.login-card input {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-bottom: 15px;
+    font-size: 14px;
+    color: #2C3E50;
+    box-sizing: border-box;
+}
+
+/* Buttons */
+.login-card button {
+    width: 100%;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    border: none;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.login-card .btn-login {
+    background-color: #27AE60;
+}
+
+.login-card .btn-login:hover {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #27AE60;
+}
+
+.login-card .btn-signup {
+    background-color: #7f8c8d;
+}
+
+.login-card .btn-signup:hover {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #7f8c8d;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-in-up {
+    animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes shake {
+    0% { transform: translateX(0); }
+    20% { transform: translateX(-5px); }
+    40% { transform: translateX(5px); }
+    60% { transform: translateX(-5px); }
+    80% { transform: translateX(5px); }
+    100% { transform: translateX(0); }
+}
+
+.shake {
+    animation-name: shake;
+    animation-duration: 0.4s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+}
+
+.login-error {
+    color: red;
+    font-size: 13px;
+    margin-bottom: 10px;
+}
+
+.btn-google {
+    background-color: #4285f4;
+    margin-top: 10px;
+    width: 100%;
+    padding: 10px;
+    font-weight: bold;
+    font-size: 14px;
+    border: none;
+    border-radius: 3px;
+    color: white;
+    cursor: pointer;
+}
+
+.btn-google:hover {
+    box-shadow: 0 0 0 2px white, 0 0 0 3px #4285f4;
+}

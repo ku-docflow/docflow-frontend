@@ -1,14 +1,16 @@
 import React, { JSX } from "react";
 import { Navigate } from "react-router-dom";
-import { useAuth } from "../../context/AuthContext";
-import "../../styles/ChatInterface/common/Spinner.css";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store";
+import "../../styles/MainInterface/common/Spinner.css";
 
 interface ProtectedRouteProps {
   children: JSX.Element;
 }
 
 export default function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const { user, loading } = useAuth();
+  const user = useSelector((state: RootState) => state.auth.user);
+  const loading = useSelector((state: RootState) => state.auth.loading);
 
   if (loading) {
     return (

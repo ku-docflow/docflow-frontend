@@ -1,9 +1,13 @@
 import React from "react";
 import Header from "../components/common/Header";
 import MainLayout from "../layouts/MainLayout";
-import "../styles/ChatInterface/pages/MainPage.css";
+import "../styles/MainInterface/pages/MainPage.css";
 
-const MainPage: React.FC = () => {
+interface MainPageProps {
+  children?: React.ReactNode;
+}
+
+const MainPage: React.FC<MainPageProps> = () => {
   return (
     <div className="main-page-container">
       <Header />

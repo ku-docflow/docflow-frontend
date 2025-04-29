@@ -1,27 +1,41 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useDispatch } from "react-redux";
+import { setUser, setLoading as setAuthLoading } from "./store/slices/authSlice";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
-import MainPage from "./pages/MainPage";
-import WikiPage from "./pages/WikiPage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
+import MainRenderComponent from "./pages/MainRenderComponent";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      console.log("🔥 Firebase user changed:", firebaseUser);
+
+      dispatch(setUser(firebaseUser));
+      dispatch(setAuthLoading(false));
+    });
+
+    return () => unsubscribe();
+  }, [dispatch]);
+
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/signup" element={<SignupPage />} />
-        {/* 보호 라우트: 인증이 안 된 상태면 /login으로 리다이렉트 */}
         <Route
-          path="/"
+          path="/*"
           element={
             <ProtectedRoute>
-              <MainPage />
+              <MainRenderComponent />
             </ProtectedRoute>
           }
         />
-        <Route path="/wiki" element={<WikiPage />} />
       </Routes>
     </BrowserRouter>
   );

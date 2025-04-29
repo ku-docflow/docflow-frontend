@@ -1,16 +1,21 @@
 import React from 'react';
-import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "../../services/firebase";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import '../../styles/common/Header.css'; 
+import { RootState } from '../../store';
+import { setSelectedRenderMode } from "../../store/slices/uiSlice";
+
 
 const Header: React.FC = () => {
-    const [user] = useAuthState(auth);
-    const navigate = useNavigate();
-    const location = useLocation();
+    const dispatch = useDispatch();
+    const focusedRenderMode = useSelector((state: RootState) => state.ui.selectedRenderMode);
 
     const handleLogout = () => {
         auth.signOut();
+    };
+
+    const toggleRenderMode = (CurrentRendertype: string) => {
+        CurrentRendertype === 'wiki' ? dispatch(setSelectedRenderMode('chat')) : dispatch(setSelectedRenderMode('wiki'));
     };
 
     return (
@@ -21,10 +26,10 @@ const Header: React.FC = () => {
             </div>
             <div className="right-group">
                 <button
-                    onClick={() => navigate(location.pathname === '/wiki' ? '/' : '/wiki')}
+                    onClick={() => toggleRenderMode(focusedRenderMode)}
                     className="toggle-button"
                 >
-                    {location.pathname === '/wiki' ? 'Chat' : 'Wiki'}
+                    {focusedRenderMode === 'wiki' ? 'Chat' : 'Wiki'}
                 </button>
                 <button onClick={handleLogout} className="logout-button">
                     Logout

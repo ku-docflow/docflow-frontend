@@ -1,62 +1,34 @@
-import React, { useState } from "react";
-import '../styles/ChatInterface/Layout/MainLayout.css';
-import OrganizationStrip from "../components/ChatInterface/Strip/OrganizationStrip/OrganizationStrip";
-import PeerStrip from "../components/ChatInterface/Strip/PeerStrip/PeerStrip";
-import ChatChannelStrip from "../components/ChatInterface/Strip/ChatChannelStrip";
-import Dashboard from "../components/ChatInterface/common/Dashboard";
-import ChatRoomStrip from "../components/ChatInterface/Strip/ChatRoomStrip";
-import SearchbotStrip from "../components/ChatInterface/Strip/SearchbotStrip";
+import React from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
+import '../styles/MainInterface/Layout/MainLayout.css';
+import OrganizationStrip from "../components/MainInterface/Strip/OrganizationStrip/OrganizationStrip";
+import PeerStrip from "../components/MainInterface/Strip/PeerStrip/PeerStrip";
+import ChatChannelStrip from "../components/MainInterface/Strip/ChatChannelStrip";
+import Dashboard from "../components/MainInterface/common/Dashboard";
+import ChatRoomStrip from "../components/MainInterface/Strip/ChatRoomStrip";
+import SearchbotStrip from "../components/MainInterface/Strip/SearchbotStrip";
 
 interface MainLayoutProps {
   children?: React.ReactNode;
 }
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
-  const [focusedOrg, setFocusedOrg] = useState<string | null>(null);
-  const [focusedChatRoom, setFocusedChatRoom] = useState<string | null>(null);
-  const [focusedPeer, setFocusedPeer] = useState<string | null>(null);
-
-  const handleProfileClick = () => {
-    setFocusedOrg(null);
-    setFocusedChatRoom(null);
-    setFocusedPeer(null);
-  };
-
-  const handleOrganizationSelect = (orgId: string) => {
-    setFocusedOrg(orgId);
-    setFocusedChatRoom(null);
-  };
-
-  const handlePeerSelect = (peerId: string) => {
-    setFocusedPeer(peerId);
-    setFocusedOrg(null);
-    setFocusedChatRoom(peerId);
-  }
-
-  const handleChatRoomSelect = (chatRoomId: string) => {
-    setFocusedChatRoom(chatRoomId);
-  };
+  const focusedOrg = useSelector((state: RootState) => state.ui.selectedOrgId);
+  const focusedChatRoom = useSelector((state: RootState) => state.ui.selectedChatRoomId);
+  const focusedPeer = useSelector((state: RootState) => state.ui.selectedPeerId);
 
   return (
     <div className="main-layout">
       <div className="org-strip">
-        <OrganizationStrip
-          onProfileClick={handleProfileClick}
-          onOrganizationSelect={handleOrganizationSelect}
-        />
+        <OrganizationStrip />
       </div>
 
       <div className="channel-strip">
         {focusedOrg === null ? (
-          <PeerStrip
-            peerId={focusedPeer}
-            onSelectChatRoom={handlePeerSelect}
-          />
+          <PeerStrip />
         ) : (
-          <ChatChannelStrip
-            orgId={focusedOrg}
-            onSelectChatRoom={handleChatRoomSelect}
-          />
+          <ChatChannelStrip />
         )}
       </div>
 
