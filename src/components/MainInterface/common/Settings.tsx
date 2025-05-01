@@ -14,14 +14,12 @@ const Settings: React.FC<SettingsProps> = ({ onClose, onLogout }) => {
   const handleNameChange = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Name changed to:", newName);
-    // 여기에 API 호출 등 실제 이름 변경 로직을 추가
     setNewName("");
   };
 
   const handlePasswordChange = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log("Password change requested:", currentPassword, newPassword);
-    // 여기에 API 호출 등 실제 비밀번호 변경 로직을 추가
     setCurrentPassword("");
     setNewPassword("");
   };
@@ -29,59 +27,59 @@ const Settings: React.FC<SettingsProps> = ({ onClose, onLogout }) => {
   return (
     <div className="modal-overlay">
       <div className="modal fade-in-up">
-        <h2>Settings</h2>
+        <h2>설정</h2>
         {/* 로그아웃 버튼 */}
         <div className="modal-buttons">
           <button type="button" onClick={onLogout}>
-            Logout
+            로그아웃
           </button>
         </div>
 
         {/* 이름 변경 폼 */}
         <form onSubmit={handleNameChange}>
           <label>
-            Change Name:
+            이름 변경:
             <input
               type="text"
-              placeholder="Enter new name"
+              placeholder="새 이름"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
             />
           </label>
           <div className="modal-buttons">
-            <button type="submit">Update Name</button>
+            <button type="submit">새 이름</button>
           </div>
         </form>
 
         {/* 비밀번호 변경 폼 */}
         <form onSubmit={handlePasswordChange}>
           <label>
-            Current Password:
+            현재 비밀번호:
             <input
               type="password"
-              placeholder="Current Password"
+              placeholder="현재 비밀번호"
               value={currentPassword}
               onChange={(e) => setCurrentPassword(e.target.value)}
             />
           </label>
           <label>
-            New Password:
+            새 비밀번호:
             <input
               type="password"
-              placeholder="New Password"
+              placeholder="새 비밀번호"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
             />
           </label>
           <div className="modal-buttons">
-            <button type="submit">Update Password</button>
+            <button type="submit">비밀번호 변경</button>
           </div>
         </form>
 
         {/* 닫기 버튼 */}
         <div className="modal-buttons">
           <button type="button" onClick={onClose}>
-            Close
+            취소
           </button>
         </div>
       </div>

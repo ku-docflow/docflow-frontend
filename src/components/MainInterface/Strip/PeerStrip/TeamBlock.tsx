@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../../../styles/MainInterface/PeerStrip/TeamBlock.css";
+import "../../../../styles/MainInterface/strips/PeerStrip/TeamBlock.css";
 import InteractionGuard from "../../../common/InteractionGuard";
 import IndividualBlock from "./IndividualBlock";
 import { Team } from "../../../../types/user";

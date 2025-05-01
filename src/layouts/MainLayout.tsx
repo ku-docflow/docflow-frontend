@@ -4,7 +4,7 @@ import { RootState } from "../store";
 import '../styles/MainInterface/Layout/MainLayout.css';
 import OrganizationStrip from "../components/MainInterface/Strip/OrganizationStrip/OrganizationStrip";
 import PeerStrip from "../components/MainInterface/Strip/PeerStrip/PeerStrip";
-import ChatChannelStrip from "../components/MainInterface/Strip/ChatChannelStrip";
+import ChatChannelStrip from "../components/MainInterface/Strip/ChatChannelStrip/ChatChannelStrip";
 import Dashboard from "../components/MainInterface/common/Dashboard";
 import ChatRoomStrip from "../components/MainInterface/Strip/ChatRoomStrip";
 import SearchbotStrip from "../components/MainInterface/Strip/SearchbotStrip";

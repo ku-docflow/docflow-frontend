@@ -19,7 +19,7 @@ const MentionInput: React.FC<MentionInputProps> = ({ mentionData, onSubmit }) =>
     selectCandidate,
   } = useMentionInput(mentionData, (finalInput) => {
     if (finalInput.trim()) {
-      onSubmit(finalInput);   // ✅ 여기서 바로 채팅창에 메시지 추가
+      onSubmit(finalInput);
     }
     setInput("");
   });

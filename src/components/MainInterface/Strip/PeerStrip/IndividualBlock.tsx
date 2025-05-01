@@ -1,6 +1,6 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import "../../../../styles/MainInterface/PeerStrip/IndividualBlock.css";
+import "../../../../styles/MainInterface/strips/PeerStrip/IndividualBlock.css";
 import { Peer } from "../../../../types/user";
 import { setSelectedPeerId, setSelectedChatRoomId } from "../../../../store/slices/uiSlice";
 
@@ -24,7 +24,7 @@ const IndividualBlock: React.FC<IndividualBlockProps> = ({ individual }) => {
       <div
         className={`IndividualBlock__indicator ${individual.online ? "online" : "offline"}`}
       />
-      <span className="IndividualBlock__name">{individual.name}</span>
+      <span className="IndividualBlock__name">{individual.first_name + individual.last_name}</span>
     </div>
   );
 };

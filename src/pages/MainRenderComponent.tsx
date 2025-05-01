@@ -1,11 +1,9 @@
-
-
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../store";
 import { setSelectedOrgId } from "../store/slices/uiSlice";
 import { fetchInitUserData } from "../api/user";
-import { initSocket } from "../services/socketService";
+import { connectSocket, getSocket } from "../services/socket";
 import { setUserInitData } from "../store/slices/userSlice";
 import MainPage from "./MainPage";
 import WikiPage from "./WikiPage";
@@ -23,18 +21,40 @@ useEffect(() => {
     if (user) {
       try {
         const initData = await fetchInitUserData();
-
         dispatch(setUserInitData(initData));
 
-        if (initData.orgs.length > 0) {
-          const firstOrg = initData.orgs[0];
-          dispatch(setSelectedOrgId(firstOrg.id));
+        const socket = connectSocket(user.uid);
+        console.log("Socket connected:", socket);
 
-          const firstTeam = firstOrg.teams?.[0];
-          // if (firstTeam?.chatroom_id) {
-          //   initSocket(firstTeam.chatroom_id);
-          // }
-        }
+        const joinRooms = (data: typeof initData) => {
+          data.orgs.forEach(org => {
+            org.teams.forEach(team => {
+              if (team.chatroom_id) {
+                socket.emit('join_room', { chatroom_id: parseInt(team.chatroom_id) });
+              }
+              team.peers.forEach(peer => {
+                if (peer.chatroom_id) {
+                  socket.emit('join_room', { chatroom_id: parseInt(peer.chatroom_id) });
+                }
+              });
+            });
+          });
+        };
+
+        joinRooms(initData);
+
+        socket.on("refresh_required", async () => {
+          console.log("🔄 refresh_required received from server");
+
+          try {
+            const refreshedData = await fetchInitUserData();
+            dispatch(setUserInitData(refreshedData));
+            joinRooms(refreshedData);
+            console.log("✅ Init data refreshed and rooms rejoined.");
+          } catch (err) {
+            console.error("❌ Failed to refresh init data:", err);
+          }
+        });
       } catch (err) {
         console.error("Failed to fetch user init data:", err);
       }

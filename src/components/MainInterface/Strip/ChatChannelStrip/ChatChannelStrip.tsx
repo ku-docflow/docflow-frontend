@@ -1,9 +1,11 @@
 // src/components/ChatChannelStrip.tsx
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../../store";
-import { setSelectedChatRoomId } from "../../../store/slices/uiSlice";
-import "../../../styles/MainInterface/ChatChannelStrip.css";
+import { RootState } from "../../../../store";
+import { setSelectedChatRoomId } from "../../../../store/slices/uiSlice";
+import "../../../../styles/MainInterface/strips/ChatChannelStrip/ChatChannelStrip.css";
+import AddNewTeamForm from "./AddNewTeamForm";
+import { createTeam } from "../../../../api/team";
 
 const ChatChannelStrip: React.FC = () => {
   const dispatch = useDispatch();
@@ -11,18 +13,26 @@ const ChatChannelStrip: React.FC = () => {
   const organizations = useSelector((state: RootState) => state.user.orgs);
   const currentUser = useSelector((state: RootState) => state.user.user);
 
+  const [isModalOpen, setIsModalOpen] = React.useState(false);
+
   const org = organizations.find((o) => o.id === selectedOrgId);
 
   if (!org || !currentUser) return null;
 
-  const authorityToCreateNewTeam = currentUser.email === org.email ? true : false;
+  const authorityToCreateNewTeam = org.admins.includes(currentUser.id);
 
-  console.log("authorityToCreateNewTeam", authorityToCreateNewTeam);
-  console.log("org email: ", org.email);
-  console.log("currentUser email: ", currentUser.email);
-
-  const DummyCreateTeamApi = async (orgId: string) => {
-    console.log(`DummyCreateTeamApi called for organization ${orgId}`);
+  const handleCreateTeam = async (teamName: string) => {
+    try {
+      console.log("org id: ", org.id);
+      await createTeam({
+        name: teamName,
+        email: currentUser.email,
+        organization_id: Number(org.id),
+      });
+      setIsModalOpen(false);
+    } catch (err) {
+      console.error("Failed to create team:", err)
+    }
   };
 
   return (
@@ -41,12 +51,17 @@ const ChatChannelStrip: React.FC = () => {
         {authorityToCreateNewTeam && (
           <li
             className="chat-channel-item"
-            onClick={() => DummyCreateTeamApi(org.id)}
+            onClick={() => setIsModalOpen(true)}
           >
-            +
+            + 새 팀 생성
           </li>
         )}
       </ul>
+      <AddNewTeamForm
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSubmit={handleCreateTeam}
+      />
     </div>
   );
 };

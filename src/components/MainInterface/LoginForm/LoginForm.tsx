@@ -21,8 +21,11 @@ const LoginForm: React.FC = () => {
 
       const name = firebaseUser.displayName || firebaseUser.email || "unknown";
 
+      const first_name = firebaseUser.displayName?.split(" ")[0] || "unknown";
+      const last_name = firebaseUser.displayName?.split(" ")[1] || "unknown";
+
       const token = await firebaseUser.getIdToken();
-      await login({ name }, token);
+      await login({ first_name, last_name }, token);
 
       navigate("/");
     } catch (error) {
@@ -39,9 +42,12 @@ const LoginForm: React.FC = () => {
     const firebaseUser = result.user;
 
     const name = firebaseUser.displayName || firebaseUser.email || "unknown"; 
+    const first_name = firebaseUser.displayName?.split(" ")[0] || "unknown";
+    const last_name = firebaseUser.displayName?.split(" ")[1] || "unknown";
+
     const token = await firebaseUser.getIdToken();
 
-    await login({ name }, token); // 내 서버에 로그인 요청 (name + token)
+    await login({ first_name, last_name }, token); // 내 서버에 로그인 요청 (name + token)
     navigate("/"); // 메인페이지로 이동
   } catch (error) {
     console.error("구글 로그인 실패", error);

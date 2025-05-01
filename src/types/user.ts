@@ -1,6 +1,7 @@
 export interface User {
   id: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   email: string;
   created_at?: string;
   profile_image?: string;
@@ -12,7 +13,8 @@ export interface InitUserRequest {}
 export interface InitUserResponse {
   user: {
     id: string;
-    name: string;
+    first_name: string;
+    last_name: string;
     email: string;
   };
   orgs: Organization[];
@@ -21,7 +23,7 @@ export interface InitUserResponse {
 export interface Organization {
   id: string;
   name: string;
-  email: string;
+  admins: string[];
   teams: Team[];
 }
 
@@ -34,7 +36,8 @@ export interface Team {
 
 export interface Peer {
   id: string;
-  name: string;
+  first_name: string;
+  last_name: string;
   chatroom_id: string | null;
   online: boolean;
 }

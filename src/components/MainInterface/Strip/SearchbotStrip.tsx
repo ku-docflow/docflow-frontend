@@ -1,12 +1,12 @@
 import React from "react";
 import ChatInterface from "../ChatInterface/ChatInterface";
-import "../../../styles/MainInterface/SearchbotStrip.css";
+import "../../../styles/MainInterface/strips/SearchbotStrip.css";
 
 const SearchbotStrip: React.FC = () => {
   return (
     <div className="searchbot-strip">
       <div className="searchbot-strip-header">
-        <h1>Searchbot</h1>
+        <h1>검색봇</h1>
       </div>
       <ChatInterface chatRoomId="searchbot" />
     </div>

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import TeamBlock from "./TeamBlock";
-import "../../../../styles/MainInterface/PeerStrip/OrganizationBlock.css";
+import "../../../../styles/MainInterface/strips/PeerStrip/OrganizationBlock.css";
 import InteractionGuard from "../../../common/InteractionGuard";
 import { Organization } from "../../../../types/user";
 

@@ -43,6 +43,11 @@ export const useMentionInput = (
           (prev) =>
             (prev - 1 + mentionCandidates.length) % mentionCandidates.length
         );
+      } else if (e.key === "Escape") {
+        e.preventDefault();
+        setIsMentioning(false);
+        setMentionCandidates([]);
+        setSelectedCandidateIndex(0);
       } else if (e.key === "Enter") {
         e.preventDefault();
         const candidate = mentionCandidates[selectedCandidateIndex];

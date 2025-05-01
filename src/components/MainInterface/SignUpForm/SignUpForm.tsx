@@ -46,9 +46,11 @@ const SignUpForm: React.FC = () => {
       const firebaseUser = userCredential.user;
 
       const name = firebaseUser.displayName || firebaseUser.email || "unknown";
+      const first_name = firebaseUser.displayName?.split(" ")[0] || "unknown";
+      const last_name = firebaseUser.displayName?.split(" ")[1] || "unknown";
 
       const token = await firebaseUser.getIdToken();
-      await login({ name }, token);
+      await login({ first_name, last_name }, token);
       navigate('/');
 
     } catch (err: any) {

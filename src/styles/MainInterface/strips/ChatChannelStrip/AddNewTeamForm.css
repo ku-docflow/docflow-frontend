@@ -70,5 +70,5 @@
 }
 
 .fade-in-up {
-    animation: fadeInUp 0.8s ease-out forwards;
+    animation: fadeInUp 0.2s ease-out forwards;
 }

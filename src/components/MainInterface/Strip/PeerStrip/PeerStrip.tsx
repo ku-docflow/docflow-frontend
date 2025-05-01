@@ -1,7 +1,7 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import OrganizationBlock from "./OrganizationBlock";
-import "../../../../styles/MainInterface/PeerStrip/PeerStrip.css";
+import "../../../../styles/MainInterface/strips/PeerStrip/PeerStrip.css";
 import { RootState } from "../../../../store";
 
 const PeerStrip: React.FC = () => {

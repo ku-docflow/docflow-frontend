@@ -2,8 +2,8 @@ import React, {useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../../store";
 import { setSelectedOrgId, resetSelection } from "../../../../store/slices/uiSlice";
-import '../../../../styles/MainInterface/OrganizationStrip/OrganizationStripButton.css';
-import '../../../../styles/MainInterface/OrganizationStrip/OrganizationStrip.css';
+import '../../../../styles/MainInterface/strips/OrganizationStrip/OrganizationStripButton.css';
+import '../../../../styles/MainInterface/strips/OrganizationStrip/OrganizationStrip.css';
 import Settings from '../../common/Settings';
 import AddOrganizationModal from "./AddOrganizationModel";
 

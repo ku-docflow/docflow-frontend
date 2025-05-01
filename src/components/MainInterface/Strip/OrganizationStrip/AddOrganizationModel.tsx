@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../../../../styles/MainInterface/OrganizationStrip/AddOrganizationModal.css";
+import "../../../../styles/MainInterface/strips/OrganizationStrip/AddOrganizationModal.css";
 import { createOrganization } from "../../../../api/organization";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store";

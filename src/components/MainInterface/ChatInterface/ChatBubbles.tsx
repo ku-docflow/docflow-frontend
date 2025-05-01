@@ -1,26 +1,6 @@
 import React from "react";
 import "../../../styles/MainInterface/common/ChatBubbles.css";
-
-export interface Sender {
-  id: string;
-  name: string;
-  profileImage?: string; // URL for the sender's profile image
-}
-
-interface MentionData {
-  id: string;
-  display: string;
-}
-
-export interface ChatBubbleProps {
-  message: string;
-  sender: Sender;
-  timestamp?: string;
-  isCurrentUser: boolean; 
-  showProfile: boolean; 
-  mentions?: MentionData[]; 
-  onProfileClick?: (sender: Sender) => void;
-}
+import { ChatBubbleProps } from "../../../types/message"
 
 const ChatBubble: React.FC<ChatBubbleProps> = ({
   message,
@@ -56,7 +36,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
       {/* Render profile image on the left if not current user */}
       {showProfile && !isCurrentUser && (
         <div className="chat-bubble-profile" onClick={handleProfileClick}>
-          <img src={defaultProfileImage} alt={sender.name} />
+          <img src={defaultProfileImage} alt={sender.first_name + sender.last_name} />
         </div>
       )}
 
@@ -65,7 +45,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
         <div className={`chat-bubble ${isCurrentUser ? "right" : "left"}`}>
           <div className="chat-bubble-content">
             {(!isCurrentUser && showProfile) && (
-              <div className="chat-bubble-sender">{sender.name}</div>
+              <div className="chat-bubble-sender">{sender.first_name + sender.last_name}</div>
             )}
             <div className="chat-bubble-message">{message}</div>
             {timestamp && (
