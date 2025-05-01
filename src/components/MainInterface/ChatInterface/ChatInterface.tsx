@@ -117,6 +117,8 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatRoomId }) => {
         chatroom_id: chatRoomId,
         message: newMessage,
       });
+    } else {
+      console.error("Socket is not connected");
     }
 
     // Dummy bot response logs

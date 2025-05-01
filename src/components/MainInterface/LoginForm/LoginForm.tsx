@@ -18,9 +18,6 @@ const LoginForm: React.FC = () => {
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const firebaseUser = userCredential.user;
-
-      const name = firebaseUser.displayName || firebaseUser.email || "unknown";
-
       const first_name = firebaseUser.displayName?.split(" ")[0] || "unknown";
       const last_name = firebaseUser.displayName?.split(" ")[1] || "unknown";
 
@@ -41,7 +38,6 @@ const LoginForm: React.FC = () => {
 
     const firebaseUser = result.user;
 
-    const name = firebaseUser.displayName || firebaseUser.email || "unknown"; 
     const first_name = firebaseUser.displayName?.split(" ")[0] || "unknown";
     const last_name = firebaseUser.displayName?.split(" ")[1] || "unknown";
 

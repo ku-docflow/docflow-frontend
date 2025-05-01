@@ -16,7 +16,21 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       console.log("🔥 Firebase user changed:", firebaseUser);
 
-      dispatch(setUser(firebaseUser));
+      const first_name = firebaseUser?.displayName?.split(" ")[0] || "unknown";
+      const last_name = firebaseUser?.displayName?.split(" ")[1] || "unknown";
+
+      if (!firebaseUser?.uid || !firebaseUser.email) {
+        return; // 또는 에러 처리
+      }
+
+      const UserInfo = {
+        id: firebaseUser?.uid,
+        email: firebaseUser?.email,
+        first_name: first_name,
+        last_name: last_name,
+      }
+
+      dispatch(setUser(UserInfo));
       dispatch(setAuthLoading(false));
     });
 

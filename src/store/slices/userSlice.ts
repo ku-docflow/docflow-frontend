@@ -1,8 +1,15 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { InitUserResponse, Organization } from "../../types/user";
 
+interface UserInfo {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
 interface UserState {
-  user: InitUserResponse["user"] | null;
+  user: UserInfo | null;
   orgs: Organization[];
 }
 

@@ -3,10 +3,11 @@ import ChatInterface from "../ChatInterface/ChatInterface";
 
 interface ChatRoomStripProps {
   chatRoomId: string | null;
+  chatRoomName: string| null;
   dm: boolean;
 }
 
-const ChatRoomStrip: React.FC<ChatRoomStripProps> = ({ chatRoomId,dm }) => {
+const ChatRoomStrip: React.FC<ChatRoomStripProps> = ({ chatRoomId, chatRoomName, dm }) => {
   return (
     <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
       <div
@@ -15,10 +16,8 @@ const ChatRoomStrip: React.FC<ChatRoomStripProps> = ({ chatRoomId,dm }) => {
           borderBottom: "1px solid #6b7280" // Tailwind's gray-500
         }}
       >
-        <h2 style={{ fontSize: "1.125rem", fontWeight: 600 }}>
-          
-          {dm ? "1:1 DM :" : ""}
-          Chat Room: {chatRoomId}
+        <h2 style={{ fontSize: "1.125rem", fontWeight: 600 }}>  
+        {chatRoomName}
         </h2>
       </div>
       <ChatInterface chatRoomId={chatRoomId || ""}></ChatInterface>
