@@ -14,13 +14,12 @@ function App() {
   useEffect(() => {
     const auth = getAuth();
     const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
-      console.log("🔥 Firebase user changed:", firebaseUser);
 
       const first_name = firebaseUser?.displayName?.split(" ")[0] || "unknown";
       const last_name = firebaseUser?.displayName?.split(" ")[1] || "unknown";
 
       if (!firebaseUser?.uid || !firebaseUser.email) {
-        return; // 또는 에러 처리
+        return;
       }
 
       const UserInfo = {

@@ -2,15 +2,16 @@ import {
   retrieveChatroomHistoryResponse,
   CreateChatroomRequest,
   CreateChatroomResponse,
-  DirectChatQuery,
   DirectChatResponse,
 } from "../types/chatroom";
 import { get, post } from "./apiClient";
 
 export const fetchChatroomHistory = async (
-  chatroomId: string
+  chatroomId: Number
 ): Promise<retrieveChatroomHistoryResponse> => {
-  return get<retrieveChatroomHistoryResponse>(`/chatroom/team/${chatroomId}`);
+  return get<retrieveChatroomHistoryResponse>(
+    `/chat/messages/chatroom_id:${chatroomId}`
+  );
 };
 
 export const createChatroom = async (
@@ -19,8 +20,8 @@ export const createChatroom = async (
   return post<CreateChatroomResponse, CreateChatroomRequest>("/chatroom", data);
 };
 
-export const fetchDirectChat = async (
-  data: DirectChatQuery
+export const fetchDirectChatHistory = async (
+  peer_id: string
 ): Promise<DirectChatResponse> => {
-  return post<DirectChatResponse, DirectChatQuery>("/chatroom/direct", data);
+  return get<DirectChatResponse>(`/chatroom/direct?peer_id=${peer_id}`);
 };

@@ -34,7 +34,7 @@ const TeamBlock: React.FC<TeamBlockProps> = ({ team }) => {
           {team.peers.map((peer) => (
             <IndividualBlock
               key={peer.id}
-              individual={peer}
+              peer={peer}
             />
           ))}
         </div>

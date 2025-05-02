@@ -3,7 +3,7 @@ import { auth } from "../../services/firebase";
 import { useSelector, useDispatch } from "react-redux";
 import '../../styles/common/Header.css'; 
 import { RootState } from '../../store';
-import { setSelectedRenderMode } from "../../store/slices/uiSlice";
+import { resetSelection, setSelectedRenderMode } from "../../store/slices/uiSlice";
 
 
 const Header: React.FC = () => {
@@ -16,6 +16,7 @@ const Header: React.FC = () => {
 
     const toggleRenderMode = (CurrentRendertype: string) => {
         CurrentRendertype === 'wiki' ? dispatch(setSelectedRenderMode('chat')) : dispatch(setSelectedRenderMode('wiki'));
+        dispatch(resetSelection());
     };
 
     return (

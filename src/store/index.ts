@@ -4,6 +4,7 @@ import uiReducer from "./slices/uiSlice";
 import authReducer from "./slices/authSlice";
 import userReducer from "./slices/userSlice";
 import messageReducer from "./slices/messageSlice";
+import DocumentHierarchyReducer from "./slices/documentSlice";
 
 export const store = configureStore({
   reducer: {
@@ -11,6 +12,7 @@ export const store = configureStore({
     auth: authReducer,
     user: userReducer,
     messages: messageReducer,
+    documents: DocumentHierarchyReducer,
   },
 });
 

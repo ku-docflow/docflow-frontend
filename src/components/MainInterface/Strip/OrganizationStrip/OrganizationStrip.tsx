@@ -1,7 +1,7 @@
 import React, {useState} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../../store";
-import { setSelectedOrgId, resetSelection } from "../../../../store/slices/uiSlice";
+import { setSelectedOrg, resetSelection } from "../../../../store/slices/uiSlice";
 import '../../../../styles/MainInterface/strips/OrganizationStrip/OrganizationStripButton.css';
 import '../../../../styles/MainInterface/strips/OrganizationStrip/OrganizationStrip.css';
 import Settings from '../../common/Settings';
@@ -32,7 +32,7 @@ const OrganizationStrip: React.FC = () => {
           <button
             key={org.id}
             className="OrganizationStripButton"
-            onClick={() => dispatch(setSelectedOrgId(org.id))}
+            onClick={() => dispatch(setSelectedOrg(org))}
           >
             {org.name.charAt(0)}
           </button>

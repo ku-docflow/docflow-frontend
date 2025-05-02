@@ -1,17 +1,21 @@
 // store/slices/uiSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { Organization, Team, Peer } from "../../types/user";
+import { Document } from "../../types/document";
 
 interface UIState {
-  selectedOrgId: string | null;
-  selectedChatRoomId: string | null;
-  selectedPeerId: string | null;
+  selectedOrg: Organization | null;
+  selectedTeam: Team | null;
+  selectedPeer: Peer | null;
+  selectedDocument: Document | null;
   selectedRenderMode: string;
 }
 
 const initialState: UIState = {
-  selectedOrgId: null,
-  selectedChatRoomId: null,
-  selectedPeerId: null,
+  selectedOrg: null,
+  selectedTeam: null,
+  selectedPeer: null,
+  selectedDocument: null,
   selectedRenderMode: "chat",
 };
 
@@ -19,33 +23,39 @@ const uiSlice = createSlice({
   name: "ui",
   initialState,
   reducers: {
-    setSelectedOrgId: (state, action: PayloadAction<string | null>) => {
-      state.selectedOrgId = action.payload;
-      state.selectedChatRoomId = null;
+    setSelectedOrg: (state, action: PayloadAction<Organization | null>) => {
+      state.selectedOrg = action.payload;
+      state.selectedTeam = null;
+      state.selectedDocument = null;
     },
-    setSelectedPeerId: (state, action: PayloadAction<string | null>) => {
-      state.selectedPeerId = action.payload;
-      state.selectedOrgId = null;
-      state.selectedChatRoomId = action.payload;
+    setSelectedPeer: (state, action: PayloadAction<Peer | null>) => {
+      state.selectedPeer = action.payload;
+      state.selectedOrg = null;
+      //state.selectedTeam = action.payload;
     },
-    setSelectedChatRoomId: (state, action: PayloadAction<string | null>) => {
-      state.selectedChatRoomId = action.payload;
+    setSelectedTeam: (state, action: PayloadAction<Team | null>) => {
+      state.selectedTeam = action.payload;
+    },
+    setSelectedDocument: (state, action: PayloadAction<Document | null>) => {
+      state.selectedDocument = action.payload;
     },
     setSelectedRenderMode: (state, action: PayloadAction<string>) => {
       state.selectedRenderMode = action.payload;
     },
     resetSelection: (state) => {
-      state.selectedOrgId = null;
-      state.selectedChatRoomId = null;
-      state.selectedPeerId = null;
+      state.selectedOrg = null;
+      state.selectedTeam = null;
+      state.selectedPeer = null;
+      state.selectedDocument = null;
     },
   },
 });
 
 export const {
-  setSelectedOrgId,
-  setSelectedPeerId,
-  setSelectedChatRoomId,
+  setSelectedOrg,
+  setSelectedPeer,
+  setSelectedTeam,
+  setSelectedDocument,
   setSelectedRenderMode,
   resetSelection,
 } = uiSlice.actions;

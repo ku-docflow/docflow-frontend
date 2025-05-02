@@ -8,7 +8,7 @@ const SearchbotStrip: React.FC = () => {
       <div className="searchbot-strip-header">
         <h1>검색봇</h1>
       </div>
-      <ChatInterface chatRoomId="searchbot" />
+      <ChatInterface team={null} peer={null} />
     </div>
   );
 };

@@ -1,0 +1,109 @@
+.TopicBlock {
+    margin-bottom: 0.75rem;
+    transition: background-color 0.3s ease, all 0.3s ease-in-out;
+    overflow: hidden;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    border-radius: 8px;
+    padding: 0.5rem;
+    position: relative;
+    text-align: left;
+    line-height: normal;
+}
+
+.TopicBlock:hover {
+    background-color: #f7f7f7;
+}
+
+.TopicBlock-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    cursor: pointer;
+    position: relative;
+    color: black;
+}
+
+.TopicBlock-content {
+    margin-top: 0.5rem;
+    transition: max-height 0.4s ease-in-out;
+    overflow: hidden;
+    max-height: 0;
+}
+
+/* Expands when toggled */
+.TopicBlock.expanded .TopicBlock-content {
+    max-height: 1000px;
+    opacity: 1;
+    padding-top: 0.4rem;
+}
+
+.TopicBlock::after {
+    content: '';
+    font-size: 1rem;
+    position: absolute;
+    top: 50%;
+    right: 1rem;
+    transform: translateY(-50%);
+    opacity: 0.3;
+    transition: transform 0.3s ease;
+}
+
+.TopicBlock.expanded::after {
+    content: '';
+}
+
+.TopicBlock:not(.expanded):hover::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(38, 166, 154, 0.1);
+    z-index: 1;
+    pointer-events: none;
+}
+
+.add-document-button-icon {
+    background: transparent;
+    color: rgb(74, 74, 74);
+    width: 24px;
+    height: 24px;
+    font-size: 16px;
+    cursor: pointer;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.add-document-button-icon::after {
+    content: "";
+    position: absolute;
+    top: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    /*background-color: black;*/
+    color: white;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s ease-in-out;
+    z-index: 10;
+}
+
+.add-document-button-icon:hover::after {
+    opacity: 1;
+}
+
+.add-document-button-icon:hover {
+    background-color: #f0f0f0;
+    border-radius: 50%;
+    transition: background-color 0.2s;
+}

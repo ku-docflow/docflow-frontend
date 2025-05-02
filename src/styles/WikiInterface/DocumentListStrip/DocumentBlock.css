@@ -1,0 +1,58 @@
+.DocumentBlock {
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    background-color: white;
+    color: black;
+    border: 1px solid black;
+    line-height: normal;
+    margin-bottom: 6px;
+}
+
+.DocumentBlock::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: rgba(38, 166, 154, 1);
+    transition: width 0.3s ease;
+    z-index: 3;
+    pointer-events: none;
+}
+
+.DocumentBlock:hover::before {
+    width: 100%;
+}
+
+.DocumentBlock::after {
+    content: 'Open →';
+    font-size: 0.9rem;
+    position: absolute;
+    top: 50%;
+    left: 0%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 4;
+    pointer-events: none;
+}
+
+.DocumentBlock:hover::after {
+    transform: translate(-50%, -50%) translateX(100%);
+    opacity: 1;
+}
+
+.DocumentBlock__title {
+    font-size: 14px;
+    z-index: 2;
+    color: black;
+    font-weight: 500;
+}

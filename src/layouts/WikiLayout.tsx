@@ -1,7 +1,9 @@
 import React, { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "../store";
 import '../styles/WikiInterface/Layout/WikiLayout.css';
 import OrganizationStrip from "../components/WikiInterface/Strip/OrganizationStrip/OrganizationStrip";
-import DocumentListStrip from "../components/WikiInterface/Strip/DocumentListStrip";
+import DocumentListStrip from "../components/WikiInterface/Strip/DocumentListStrip/DocumentListStrip";
 import MarkdownStrip from "../components/WikiInterface/Strip/MarkdownStrip";
 
 interface WikiInterfaceProps {
@@ -9,8 +11,8 @@ interface WikiInterfaceProps {
 }
 
 const WikiLayout: React.FC<WikiInterfaceProps> = () => {
-  const [selectedOrg] = useState<string | null>(null);
-  const [selectedDoc, setSelectedDoc] = useState<string | null>(null);
+  const focusedOrg = useSelector((state: RootState) => state.ui.selectedOrg);
+  const focusedDoc = useSelector((state: RootState) => state.ui.selectedDocument);
 
   return (
     <div className="wiki-layout">
@@ -18,13 +20,15 @@ const WikiLayout: React.FC<WikiInterfaceProps> = () => {
         <OrganizationStrip />
       </div>
       <div className="wiki-doclist-strip">
-        {selectedOrg && (
-          <DocumentListStrip orgId={selectedOrg} onSelectDocument={setSelectedDoc} />
-        )}
+        {focusedOrg ? (
+          <DocumentListStrip />
+        ) :
+          <div className="wiki-placeholder">Select an organization to view documents</div>
+       }
       </div>
       <div className="wiki-markdown-strip">
-        {selectedDoc ? (
-          <MarkdownStrip documentId={selectedDoc} />
+        {focusedDoc ? (
+          <MarkdownStrip />
         ) : (
           <div className="wiki-placeholder">Select a document to view it</div>
         )}

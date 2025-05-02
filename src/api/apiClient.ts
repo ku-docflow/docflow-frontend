@@ -23,7 +23,6 @@ api.interceptors.request.use(
     if (user && config.headers) {
       const token = await user.getIdToken();
       config.headers["Authorization"] = `Bearer ${token}`;
-      console.log(`🔑 Sending request with token: ${token}`);
     }
 
     return config;

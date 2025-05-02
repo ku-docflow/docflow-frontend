@@ -1,14 +1,15 @@
-import React, { useState, useRef, useEffect, use } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import ChatBubble from "./ChatBubbles";
 import MentionInput from "./MentionInput";
 import { extractMentions } from "./mentionUtils";
 import "../../../styles/MainInterface/common/ChatInterface.css";
-import { fetchChatroomHistory } from "../../../api/chatroom";
+import { fetchChatroomHistory, fetchDirectChatHistory } from "../../../api/chatroom";
 import { retrieveChatroomHistoryResponse } from "../../../types/chatroom";
 import { Message, Mention } from "../../../types/message"
 import { getSocket } from "../../../services/socket";
+import { Team, Peer } from "../../../types/user";
 
 export interface MentionData {
   id: string;
@@ -16,18 +17,49 @@ export interface MentionData {
 }
 
 interface ChatInterfaceProps {
-  chatRoomId: string;
+  team: Team | null;
+  peer: Peer | null;
 }
 
-const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatRoomId }) => {
+const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
+  
+  const [chatRoomId, setChatRoomId] = useState<string>("0");
   const [messages, setMessages] = useState<Message[]>([]);
   const [showNewMsgAlert, setShowNewMsgAlert] = useState(false);
   const chatMessagesRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const orgs = useSelector((state: RootState) => state.user.orgs);
-  const selectedChatRoomId = useSelector((state: RootState) => state.ui.selectedChatRoomId);
   const currentUser = useSelector((state: RootState) => state.user.user);
+
+    useEffect(() => {
+    const resolveChatRoomId = async () => {
+      if (team && !peer) {
+        setChatRoomId(team.chatroom_id);
+        try {
+          const response: retrieveChatroomHistoryResponse = await fetchChatroomHistory(Number(chatRoomId));
+          setMessages(response.messages);
+          scrollToBottom();
+        } catch (error) {
+          console.error("Failed to fetch chat history:", error);
+        }
+      } else if (peer && !team) {
+        try {
+          const response = await fetchDirectChatHistory(peer.id);
+          setChatRoomId(response.chatroom_id);
+          setMessages(response.messages);
+          scrollToBottom();
+        } catch (error) {
+          console.error("Failed to fetch DM:", error);
+        }
+      } else if (peer && team) {
+        setChatRoomId("0");
+        //검색봇 기록을 가져올지 말지 정해야될듯, 가져오는게 좋아보인다
+      }
+    };
+
+    resolveChatRoomId();
+  }, [team, peer, chatRoomId]);
 
   const peers = orgs.flatMap((org) =>
     org.teams.flatMap((team) =>
@@ -52,22 +84,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatRoomId }) => {
   };
 
   useEffect(() => {
-    if (chatRoomId !== selectedChatRoomId) return;
-
-    const fetchMessages = async () => {
-      try {
-        const response: retrieveChatroomHistoryResponse = await fetchChatroomHistory(chatRoomId);
-        setMessages(response.messages);
-        scrollToBottom();
-      } catch (error) {
-        console.error("Failed to fetch chat history:", error);
-      }
-    };
-
-    fetchMessages();
-  }, [chatRoomId, selectedChatRoomId]);
-
-  useEffect(() => {
     if (chatMessagesRef.current && messages.length > 0) {
       const container = chatMessagesRef.current;
       const lastMsg = messages[messages.length - 1];
@@ -82,7 +98,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatRoomId }) => {
         setShowNewMsgAlert(true);
       }
     }
-  }, [messages]);
+  }, [messages, currentUser]);
 
   const handleSendMessage = async (text: string) => {
     if (!text.trim() || !currentUser) return;
@@ -107,7 +123,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatRoomId }) => {
       mentions: newMentions,
     };
 
-    // Optimistic UI update
     setMessages((prevMessages) => [...prevMessages, newMessage]);
     setTimeout(() => scrollToBottom(), 0);
 
@@ -121,7 +136,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ chatRoomId }) => {
       console.error("Socket is not connected");
     }
 
-    // Dummy bot response logs
     const mentionedIds = newMentions.map((m) => m.userId);
     if (mentionedIds.includes("summarybot")) {
       console.log(`[summaryBotDummyApi] called with chatroomId=${chatRoomId}, message=${text}`);

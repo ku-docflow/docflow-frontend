@@ -2,20 +2,20 @@
 import React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../../store";
-import { setSelectedChatRoomId } from "../../../../store/slices/uiSlice";
+import { setSelectedTeam } from "../../../../store/slices/uiSlice";
 import "../../../../styles/MainInterface/strips/ChatChannelStrip/ChatChannelStrip.css";
 import AddNewTeamForm from "./AddNewTeamForm";
 import { createTeam } from "../../../../api/team";
 
 const ChatChannelStrip: React.FC = () => {
   const dispatch = useDispatch();
-  const selectedOrgId = useSelector((state: RootState) => state.ui.selectedOrgId);
+  const selectedOrg = useSelector((state: RootState) => state.ui.selectedOrg);
   const organizations = useSelector((state: RootState) => state.user.orgs);
   const currentUser = useSelector((state: RootState) => state.user.user);
 
   const [isModalOpen, setIsModalOpen] = React.useState(false);
 
-  const org = organizations.find((o) => o.id === selectedOrgId);
+  const org = organizations.find((o) => o === selectedOrg);
 
   if (!org || !currentUser) return null;
 
@@ -43,7 +43,7 @@ const ChatChannelStrip: React.FC = () => {
           <li
             key={team.id}
             className="chat-channel-item"
-            onClick={() => dispatch(setSelectedChatRoomId(team.chatroom_id))}
+            onClick={() => dispatch(setSelectedTeam(team))}
           >
             # {team.name}
           </li>

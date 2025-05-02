@@ -14,9 +14,9 @@ interface MainLayoutProps {
 }
 
 const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
-  const focusedOrg = useSelector((state: RootState) => state.ui.selectedOrgId);
-  const focusedChatRoom = useSelector((state: RootState) => state.ui.selectedChatRoomId);
-  const focusedPeer = useSelector((state: RootState) => state.ui.selectedPeerId);
+  const focusedOrg = useSelector((state: RootState) => state.ui.selectedOrg);
+  const focusedTeam = useSelector((state: RootState) => state.ui.selectedTeam);
+  const focusedPeer = useSelector((state: RootState) => state.ui.selectedPeer);
 
   return (
     <div className="main-layout">
@@ -37,14 +37,14 @@ const MainLayout: React.FC<MainLayoutProps> = ({ children }) => {
           focusedPeer === null ? (
             <Dashboard />
           ) : (
-            <ChatRoomStrip chatRoomId={focusedChatRoom} dm={true} />
+              <ChatRoomStrip team={null} peer={focusedPeer} dm={true} />
           )
-        ) : focusedChatRoom === null ? (
+        ) : focusedTeam === null ? (
           <div className="chat-area-placeholder">
             <p className="text-gray-300">채팅방이 선택되지 않았습니다.</p>
           </div>
         ) : (
-              <ChatRoomStrip chatRoomId={focusedChatRoom} dm={false} />
+              <ChatRoomStrip team={focusedTeam} peer={null} dm={false} />
         )}
       </div>
 

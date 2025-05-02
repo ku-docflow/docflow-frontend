@@ -18,19 +18,14 @@ export interface CreateChatroomResponse {
   };
 }
 
-export interface DirectChatQuery {
-  user_id: string;
-  peer_id: string;
-}
-
+export interface DirectChatRequest {}
 export interface DirectChatResponse {
-  chatroom_id: string;
+  chatroom_id: string; //DM chat room id
   messages: Message[];
 }
 
 export interface retrieveChatroomHistoryRequest {}
 
 export interface retrieveChatroomHistoryResponse {
-  chatroom_id: string;
   messages: Message[];
 }

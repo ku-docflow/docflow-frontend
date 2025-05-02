@@ -11,20 +11,24 @@ export interface Sender extends User {
 }
 export interface Message {
   id: string;
-  type: "default" | "shared";
   text: string;
-  mentions?: Mention[];
+  chatroom_id?: string;
   timestamp: string;
+  type: "default" | "shared";
   sender: Sender;
-  sharedMessage?: {
-    originalId: string;
-    originalSender: Sender;
-  };
+  mentions?: Mention[];
+  shared_message_id?: string | null;
+  shared_message_sender?: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    profile_image?: string;
+  } | null;
 }
 
 export interface Mention {
   userId: string;
-  displayName: string;
+  displayName?: string;
   startIndex: number;
   endIndex: number;
 }
