@@ -1,15 +1,17 @@
 import { useState } from "react";
-import { MentionData } from "./ChatInterface";
+import { Mention } from "../../types/message";
 
 export const useMentionInput = (
-  mentionData: MentionData[],
-  onSelect: (input: string) => void
+  mentionData: Mention[],
+  onSelect: (input: string, mentions: Mention[]) => void,
+  textareaRef: React.RefObject<HTMLTextAreaElement | null>
 ) => {
   const [input, setInput] = useState("");
   const [isMentioning, setIsMentioning] = useState(false);
   const [mentionQuery, setMentionQuery] = useState("");
-  const [mentionCandidates, setMentionCandidates] = useState<MentionData[]>([]);
+  const [mentionCandidates, setMentionCandidates] = useState<Mention[]>([]);
   const [selectedCandidateIndex, setSelectedCandidateIndex] = useState(0);
+  const [mentions, setMentions] = useState<Mention[]>([]);
 
   const handleInputChange = (value: string) => {
     setInput(value);
@@ -20,7 +22,7 @@ export const useMentionInput = (
       setMentionQuery(query);
 
       const candidates = mentionData.filter((item) =>
-        item.display.startsWith(query)
+        item.displayName?.startsWith(query)
       );
       setMentionCandidates(candidates);
       setIsMentioning(candidates.length > 0);
@@ -54,25 +56,63 @@ export const useMentionInput = (
         if (candidate) selectCandidate(candidate);
       }
     } else {
+      if (e.key === "Backspace") {
+        const caret = textareaRef.current?.selectionStart ?? 0;
+        const mentionToRemove = mentions.find((m) => caret === m.endIndex);
+        if (mentionToRemove) {
+          e.preventDefault();
+          const before = input.slice(0, mentionToRemove.startIndex);
+          const after = input.slice(mentionToRemove.endIndex);
+          setInput(before + after);
+          setMentions(mentions.filter((m) => m !== mentionToRemove));
+          requestAnimationFrame(() => {
+            textareaRef.current?.setSelectionRange(
+              mentionToRemove.startIndex,
+              mentionToRemove.startIndex
+            );
+          });
+          return;
+        }
+      }
       if (e.key === "Enter" && !e.shiftKey) {
         e.preventDefault();
         const trimmed = input.trim();
         if (trimmed) {
-          onSelect(trimmed);
+          onSelect(trimmed, mentions);
           setInput("");
+          setMentions([]);
         }
       }
     }
   };
 
-  const selectCandidate = (candidate: MentionData) => {
-    const lastAt = input.lastIndexOf("@");
-    const beforeAt = input.slice(0, lastAt);
-    const afterQuery = input.slice(lastAt + mentionQuery.length + 1);
-    const newInput = `${beforeAt}@${candidate.display} ${afterQuery}`;
+  const selectCandidate = (candidate: Mention) => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
 
+    const caret = textarea.selectionStart;
+    const textBeforeCaret = input.slice(0, caret);
+    const atIndex = textBeforeCaret.lastIndexOf("@");
+    const textAfterCaret = input.slice(caret);
+
+    const inserted = `@${candidate.displayName}`;
+    const newInput =
+      textBeforeCaret.slice(0, atIndex) + inserted + " " + textAfterCaret;
+
+    const newMention: Mention = {
+      userId: candidate.userId,
+      displayName: candidate.displayName,
+      startIndex: atIndex,
+      endIndex: atIndex + inserted.length,
+    };
     setInput(newInput);
+    setMentions([...mentions, newMention]);
     setIsMentioning(false);
+
+    requestAnimationFrame(() => {
+      const newCaret = newMention.endIndex + 1;
+      textarea.setSelectionRange(newCaret, newCaret);
+    });
   };
 
   return {

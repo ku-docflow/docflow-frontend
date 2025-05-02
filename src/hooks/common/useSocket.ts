@@ -1,9 +1,13 @@
 // src/hooks/useSocket.ts
 import { useEffect } from "react";
-import { connectSocket, disconnectSocket, getSocket } from "../services/socket";
+import {
+  connectSocket,
+  disconnectSocket,
+  getSocket,
+} from "../../services/socket";
 import { useDispatch } from "react-redux";
-import { setUserInitData } from "../store/slices/userSlice";
-import { appendBufferedMessage } from "../store/slices/messageSlice";
+import { setUserInitData } from "../../store/slices/userSlice";
+import { appendBufferedMessage } from "../../store/slices/messageSlice";
 
 export const useSocket = (userId: string, idToken: string) => {
   const dispatch = useDispatch();

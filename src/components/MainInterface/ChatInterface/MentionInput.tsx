@@ -1,13 +1,14 @@
-import React from "react";
-import { useMentionInput } from "./useMentionInput";
-import { MentionData } from "./ChatInterface";
+import React, { useRef } from "react";
+import { useMentionInput } from "../../../hooks/ChatInterfaceHooks/useMentionInput";
+import { Mention } from "../../../types/message";
 
 interface MentionInputProps {
-  mentionData: MentionData[];
-  onSubmit: (message: string) => void;
+  mentionData: Mention[];
+  onSubmit: (message: string, mentions: Mention[]) => void;
 }
 
 const MentionInput: React.FC<MentionInputProps> = ({ mentionData, onSubmit }) => {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const {
     input,
     setInput,
@@ -17,23 +18,24 @@ const MentionInput: React.FC<MentionInputProps> = ({ mentionData, onSubmit }) =>
     handleInputChange,
     handleKeyDown,
     selectCandidate,
-  } = useMentionInput(mentionData, (finalInput) => {
+  } = useMentionInput(mentionData, (finalInput, mentions) => {
     if (finalInput.trim()) {
-      onSubmit(finalInput);
+      onSubmit(finalInput, mentions);
     }
     setInput("");
-  });
+  }, textareaRef);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!input.trim()) return;
-    onSubmit(input);
+    onSubmit(input, []);
     setInput("");
   };
 
   return (
     <form onSubmit={handleSubmit} className="chat-input-form" style={{ position: "relative" }}>
       <textarea
+        ref={textareaRef}
         value={input}
         onChange={(e) => handleInputChange(e.target.value)}
         onKeyDown={handleKeyDown}
@@ -46,11 +48,11 @@ const MentionInput: React.FC<MentionInputProps> = ({ mentionData, onSubmit }) =>
         <div className="mentions-box">
           {mentionCandidates.map((candidate, index) => (
             <div
-              key={candidate.id}
+              key={candidate.userId}
               className={`mentions-candidate ${index === selectedCandidateIndex ? "focused" : ""}`}
               onMouseDown={() => selectCandidate(candidate)}
             >
-              {candidate.display}
+              {candidate.displayName}
             </div>
           ))}
         </div>

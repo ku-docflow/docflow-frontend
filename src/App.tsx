@@ -5,7 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import SignupPage from "./pages/SignupPage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
-import MainRenderComponent from "./pages/MainRenderComponent";
+import MainRenderPage from "./pages/MainRenderPage";
 import { getAuth, onAuthStateChanged } from "firebase/auth";
 
 function App() {
@@ -45,7 +45,7 @@ function App() {
           path="/*"
           element={
             <ProtectedRoute>
-              <MainRenderComponent />
+              <MainRenderPage />
             </ProtectedRoute>
           }
         />

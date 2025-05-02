@@ -1,15 +1,15 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useRef, useMemo } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import ChatBubble from "./ChatBubbles";
 import MentionInput from "./MentionInput";
-import { extractMentions } from "./mentionUtils";
+import { createMentionData } from "../../../utils/ChatInterfaceUtils/mentionUtils";
 import "../../../styles/MainInterface/common/ChatInterface.css";
-import { fetchChatroomHistory, fetchDirectChatHistory } from "../../../api/chatroom";
-import { retrieveChatroomHistoryResponse } from "../../../types/chatroom";
 import { Message, Mention } from "../../../types/message"
 import { getSocket } from "../../../services/socket";
 import { Team, Peer } from "../../../types/user";
+import { useResolveChatRoomId } from "../../../hooks/ChatInterfaceHooks/useResolveChatRoomId";
+import { useStickyScroll } from "../../../hooks/ChatInterfaceHooks/useStickyScroll";
 
 export interface MentionData {
   id: string;
@@ -22,44 +22,16 @@ interface ChatInterfaceProps {
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
-  
-  const [chatRoomId, setChatRoomId] = useState<string>("0");
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [showNewMsgAlert, setShowNewMsgAlert] = useState(false);
+  const chatRoomId = useResolveChatRoomId(team, peer); //retrieves chat room id for communication
   const chatMessagesRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  const allMessagesByRoom = useSelector((state: RootState) => state.messages);
+  const messages = useMemo(() => {
+    return allMessagesByRoom[Number(chatRoomId)] || [];
+  }, [allMessagesByRoom, chatRoomId]);
   const orgs = useSelector((state: RootState) => state.user.orgs);
   const currentUser = useSelector((state: RootState) => state.user.user);
-
-    useEffect(() => {
-    const resolveChatRoomId = async () => {
-      if (team && !peer) {
-        setChatRoomId(team.chatroom_id);
-        try {
-          const response: retrieveChatroomHistoryResponse = await fetchChatroomHistory(Number(chatRoomId));
-          setMessages(response.messages);
-          scrollToBottom();
-        } catch (error) {
-          console.error("Failed to fetch chat history:", error);
-        }
-      } else if (peer && !team) {
-        try {
-          const response = await fetchDirectChatHistory(peer.id);
-          setChatRoomId(response.chatroom_id);
-          setMessages(response.messages);
-          scrollToBottom();
-        } catch (error) {
-          console.error("Failed to fetch DM:", error);
-        }
-      } else if (peer && team) {
-        setChatRoomId("0");
-        //검색봇 기록을 가져올지 말지 정해야될듯, 가져오는게 좋아보인다
-      }
-    };
-
-    resolveChatRoomId();
-  }, [team, peer, chatRoomId]);
 
   const peers = orgs.flatMap((org) =>
     org.teams.flatMap((team) =>
@@ -67,64 +39,22 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
     )
   );
 
-  const mentionablePeers = peers.map((peer) => ({
-    id: peer.id,
-    display: peer.first_name + peer.last_name,
-  }));
+  const mentionData = createMentionData(peers); //mentionable peers를 담고있는 구조체
 
-  const bots: MentionData[] = [
-    { id: "searchbot", display: "검색봇" },
-    { id: "summarybot", display: "정리봇" },
-  ];
+  const { scrollToBottom, showNewMsgAlert } = useStickyScroll(messages, currentUser, chatMessagesRef, messagesEndRef);
 
-  const mentionData: MentionData[] = [...mentionablePeers, ...bots];
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
-  };
-
-  useEffect(() => {
-    if (chatMessagesRef.current && messages.length > 0) {
-      const container = chatMessagesRef.current;
-      const lastMsg = messages[messages.length - 1];
-      const isAtBottom = container.scrollHeight - container.scrollTop <= container.clientHeight + 50;
-      if (!currentUser) return;
-      const hasMentionedMe = lastMsg.mentions?.some((mention) => mention.userId === currentUser.id);
-
-      if (isAtBottom || hasMentionedMe) {
-        scrollToBottom();
-        setShowNewMsgAlert(false);
-      } else {
-        setShowNewMsgAlert(true);
-      }
-    }
-  }, [messages, currentUser]);
-
-  const handleSendMessage = async (text: string) => {
+  const handleSendMessage = async (text: string, mentions: Mention[]) => {
     if (!text.trim() || !currentUser) return;
 
-    const rawMentions = extractMentions(text, mentionData);
-    const newMentions: Mention[] = rawMentions.map(({ id, display }) => {
-      const startIndex = text.indexOf(`@${display}`);
-      return {
-        userId: id,
-        displayName: display,
-        startIndex,
-        endIndex: startIndex + display.length + 1,
-      };
-    });
-
     const newMessage: Message = {
-      id: Date.now().toString(),
+      chatroom_id: chatRoomId,
       type: "default",
-      text,
-      timestamp: new Date().toISOString(),
+      text: text,
       sender: currentUser,
-      mentions: newMentions,
+      mentions,
+      shared_message_id: null,
+      shared_message_sender: null,
     };
-
-    setMessages((prevMessages) => [...prevMessages, newMessage]);
-    setTimeout(() => scrollToBottom(), 0);
 
     const socket = getSocket();
     if (socket?.connected) {
@@ -136,7 +66,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
       console.error("Socket is not connected");
     }
 
-    const mentionedIds = newMentions.map((m) => m.userId);
+    const mentionedIds = mentions.map((m) => m.userId);
     if (mentionedIds.includes("summarybot")) {
       console.log(`[summaryBotDummyApi] called with chatroomId=${chatRoomId}, message=${text}`);
     }

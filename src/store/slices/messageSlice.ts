@@ -1,13 +1,6 @@
 // src/store/messageSlice.ts
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-
-interface Message {
-  id: string;
-  chatroom_id: number;
-  sender_id: string;
-  text: string;
-  timestamp: string;
-}
+import { Message } from "../../types/message";
 
 interface MessageState {
   [chatroomId: number]: Message[];
@@ -21,10 +14,14 @@ const messageSlice = createSlice({
   reducers: {
     appendBufferedMessage: (state, action: PayloadAction<Message>) => {
       const msg = action.payload;
-      if (!state[msg.chatroom_id]) {
-        state[msg.chatroom_id] = [];
+      const chatroomId = Number(msg.chatroom_id);
+      if (!state[chatroomId]) {
+        state[chatroomId] = [];
       }
-      state[msg.chatroom_id].push(msg);
+      const alreadyExists = state[chatroomId].some((m) => m.id === msg.id);
+      if (!alreadyExists) {
+        state[chatroomId].push(msg);
+      }
     },
     loadBufferedMessages: (
       state,

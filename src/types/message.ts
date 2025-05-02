@@ -10,10 +10,10 @@ export interface Sender extends User {
   online?: boolean;
 }
 export interface Message {
-  id: string;
+  id?: string;
   text: string;
-  chatroom_id?: string;
-  timestamp: string;
+  chatroom_id: string;
+  timestamp?: string;
   type: "default" | "shared";
   sender: Sender;
   mentions?: Mention[];

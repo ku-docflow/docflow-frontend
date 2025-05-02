@@ -10,7 +10,7 @@ export const fetchChatroomHistory = async (
   chatroomId: Number
 ): Promise<retrieveChatroomHistoryResponse> => {
   return get<retrieveChatroomHistoryResponse>(
-    `/chat/messages/chatroom_id:${chatroomId}`
+    `/chat/messages?chatroom_id=${chatroomId}`
   );
 };
 

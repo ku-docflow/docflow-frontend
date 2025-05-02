@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+import { RootState } from "../../../../store";
 import React, { useState } from "react";
 import "../../../../styles/MainInterface/strips/PeerStrip/TeamBlock.css";
 import InteractionGuard from "../../../common/InteractionGuard";
@@ -24,6 +26,9 @@ const TeamBlock: React.FC<TeamBlockProps> = ({ team }) => {
     }
   };
 
+  const currentUserId = useSelector((state: RootState) => state.auth.user?.id);
+  const visiblePeers = team.peers.filter(peer => peer.id !== currentUserId);
+
   return (
     <InteractionGuard duration={500} trigger={expanded}>
       <div className={`TeamBlock ${expanded ? "expanded" : ""} ${isCollapsing ? "collapsing" : ""}`}>
@@ -31,11 +36,8 @@ const TeamBlock: React.FC<TeamBlockProps> = ({ team }) => {
           <span>{team.name}</span>
         </div>
         <div className="TeamBlock-content">
-          {team.peers.map((peer) => (
-            <IndividualBlock
-              key={peer.id}
-              peer={peer}
-            />
+          {visiblePeers.map((peer) => (
+            <IndividualBlock key={peer.id} peer={peer} />
           ))}
         </div>
       </div>
