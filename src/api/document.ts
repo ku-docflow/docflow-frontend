@@ -8,22 +8,55 @@ import {
   UpdateDocumentRequest,
   UpdateDocumentResponse,
   DeleteDocumentResponse,
+  docGenerationRequest,
+  docGenerationResponse,
 } from "../types/document";
 
-export const createDocument = (data: CreateDocumentRequest) =>
-  post<CreateDocumentResponse, CreateDocumentRequest>("/document", data);
+export const createDocument = async (
+  data: CreateDocumentRequest
+): Promise<CreateDocumentResponse> => {
+  return post<CreateDocumentResponse, CreateDocumentRequest>("/document", data);
+};
 
-export const fetchDocumentById = (id: number) =>
-  get<GetDocumentByIdResponse>(`/document/${id}`);
+export const fetchDocumentById = async (
+  id: number
+): Promise<GetDocumentByIdResponse> => {
+  return get<GetDocumentByIdResponse>(`/document/${id}`);
+};
 
-export const fetchDocumentsByTopic = (topicId: number) =>
-  get<GetDocumentsByTopicResponse>(`/document/topic/${topicId}`);
+export const fetchDocumentsByTopic = async (
+  topicId: number
+): Promise<GetDocumentsByTopicResponse> => {
+  return get<GetDocumentsByTopicResponse>(`/document/topic/${topicId}`);
+};
 
-export const fetchDocumentsByOrg = (orgId: number) =>
-  get<GetDocumentsByOrgResponse>(`/document/org/${orgId}`);
+export const fetchDocumentsByOrg = async (
+  orgId: number
+): Promise<GetDocumentsByOrgResponse> => {
+  return get<GetDocumentsByOrgResponse>(`/document/org/${orgId}`);
+};
 
-export const updateDocument = (id: number, data: UpdateDocumentRequest) =>
-  patch<UpdateDocumentResponse, UpdateDocumentRequest>(`/document/${id}`, data);
+export const updateDocument = async (
+  id: number,
+  data: UpdateDocumentRequest
+): Promise<UpdateDocumentResponse> => {
+  return patch<UpdateDocumentResponse, UpdateDocumentRequest>(
+    `/document/${id}`,
+    data
+  );
+};
 
-export const deleteDocument = (id: number) =>
-  del<DeleteDocumentResponse>(`/document/${id}`);
+export const deleteDocument = async (
+  id: number
+): Promise<DeleteDocumentResponse> => {
+  return del<DeleteDocumentResponse>(`/document/${id}`);
+};
+
+export const generateDocument = async (
+  data: docGenerationRequest
+): Promise<docGenerationResponse> => {
+  return post<docGenerationResponse, docGenerationRequest>(
+    "/document/generate",
+    data
+  );
+};

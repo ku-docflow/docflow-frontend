@@ -6,6 +6,7 @@ export interface User {
   created_at?: string;
   profile_image?: string;
   online?: boolean;
+  search_bot_chatroom_id?: string;
 }
 
 export interface InitUserRequest {}
@@ -16,8 +17,22 @@ export interface InitUserResponse {
     first_name: string;
     last_name: string;
     email: string;
+    search_bot_chatroom_id?: string;
   };
   orgs: Organization[];
+}
+
+export interface PatchUserNameRequest {
+  first_name: string;
+  last_name: string;
+}
+
+export interface PatchUserNameResponse {
+  id: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+  created_at: string;
 }
 
 export interface Organization {

@@ -6,7 +6,9 @@ const SearchbotStrip: React.FC = () => {
   return (
     <div className="searchbot-strip">
       <div className="searchbot-strip-header">
-        <h1>검색봇</h1>
+          <h1 className="searchbot-strip-title">
+            검색봇
+          </h1>
       </div>
       <ChatInterface team={null} peer={null} />
     </div>

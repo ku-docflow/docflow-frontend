@@ -14,4 +14,7 @@ export const joinChatRooms = (socket: Socket, initData: InitUserResponse) => {
       });
     });
   });
+  socket.emit("join_room", {
+    chatroom_id: Number(initData.user.search_bot_chatroom_id),
+  });
 };

@@ -2,16 +2,16 @@ import { useState } from "react";
 import { Mention } from "../../types/message";
 
 export const useMentionInput = (
-  mentionData: Mention[],
+  mentionData: Mention[] | null,
   onSelect: (input: string, mentions: Mention[]) => void,
+  mentions: Mention[],
+  setMentions: React.Dispatch<React.SetStateAction<Mention[]>>,
   textareaRef: React.RefObject<HTMLTextAreaElement | null>
 ) => {
   const [input, setInput] = useState("");
   const [isMentioning, setIsMentioning] = useState(false);
-  const [mentionQuery, setMentionQuery] = useState("");
   const [mentionCandidates, setMentionCandidates] = useState<Mention[]>([]);
   const [selectedCandidateIndex, setSelectedCandidateIndex] = useState(0);
-  const [mentions, setMentions] = useState<Mention[]>([]);
 
   const handleInputChange = (value: string) => {
     setInput(value);
@@ -19,11 +19,11 @@ export const useMentionInput = (
     const lastAt = value.lastIndexOf("@");
     if (lastAt !== -1) {
       const query = value.slice(lastAt + 1);
-      setMentionQuery(query);
 
-      const candidates = mentionData.filter((item) =>
+      const candidates = mentionData?.filter((item) =>
         item.displayName?.startsWith(query)
       );
+      if (!candidates) return;
       setMentionCandidates(candidates);
       setIsMentioning(candidates.length > 0);
       setSelectedCandidateIndex(0);
@@ -79,6 +79,7 @@ export const useMentionInput = (
         const trimmed = input.trim();
         if (trimmed) {
           onSelect(trimmed, mentions);
+          console.log("Mentions submitted:", mentions);
           setInput("");
           setMentions([]);
         }

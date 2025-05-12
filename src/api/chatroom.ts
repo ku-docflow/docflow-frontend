@@ -3,6 +3,7 @@ import {
   CreateChatroomRequest,
   CreateChatroomResponse,
   DirectChatResponse,
+  SearchBotChatroomHistoryResponse,
 } from "../types/chatroom";
 import { get, post } from "./apiClient";
 
@@ -25,3 +26,10 @@ export const fetchDirectChatHistory = async (
 ): Promise<DirectChatResponse> => {
   return get<DirectChatResponse>(`/chatroom/direct?peer_id=${peer_id}`);
 };
+
+export const fetchSearchBotChatHistory =
+  async (): Promise<SearchBotChatroomHistoryResponse> => {
+    return get<SearchBotChatroomHistoryResponse>(
+      `/chat/messages?chatroom_id=0`
+    );
+  };

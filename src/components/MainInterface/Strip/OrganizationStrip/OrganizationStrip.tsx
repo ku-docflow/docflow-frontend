@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, ReactElement} from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../../store";
 import { setSelectedOrg, resetSelection } from "../../../../store/slices/uiSlice";
@@ -6,6 +6,7 @@ import '../../../../styles/MainInterface/strips/OrganizationStrip/OrganizationSt
 import '../../../../styles/MainInterface/strips/OrganizationStrip/OrganizationStrip.css';
 import Settings from '../../common/Settings';
 import AddOrganizationModal from "./AddOrganizationModel";
+import { FaCog } from "react-icons/fa";
 
 const OrganizationStrip: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,7 +57,7 @@ const OrganizationStrip: React.FC = () => {
           className="OrganizationStripButton"
           onClick={() => setIsSettingsOpen(true)}
         >
-          ⚙️
+          {FaCog({ size: 24, color: "#444" }) as ReactElement}
         </button>
       </div>
       {isSettingsOpen && (

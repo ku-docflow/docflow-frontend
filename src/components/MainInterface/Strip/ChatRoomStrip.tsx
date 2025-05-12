@@ -1,6 +1,7 @@
 import React from "react";
 import ChatInterface from "../ChatInterface/ChatInterface";
 import { Team, Peer } from "../../../types/user";
+import "../../../styles/MainInterface/strips/ChatRoomStrip.css";
 
 interface ChatRoomStripProps {
   team: Team | null;
@@ -10,20 +11,15 @@ interface ChatRoomStripProps {
 
 const ChatRoomStrip: React.FC<ChatRoomStripProps> = ({ team, peer, dm }) => {
   return (
-    <div style={{ display: "flex", flexDirection: "column", height: "100%" }}>
-      <div
-        style={{
-          padding: "1rem",
-          borderBottom: "1px solid #6b7280" // Tailwind's gray-500
-        }}
-      >
-        <h2 style={{ fontSize: "1.125rem", fontWeight: 600 }}>  
+    <div className="chatroom-strip-container">
+      <div className="chatroom-strip-header">
+        <h1 className="chatroom-strip-title">  
           {team ? team.name :
             peer ? "DM: " + peer.first_name + " " + peer.last_name :
               "검색봇"}
-        </h2>
+        </h1>
       </div>
-      <ChatInterface team={team} peer={null}></ChatInterface>
+      <ChatInterface team={team} peer={peer}></ChatInterface>
     </div>
   );
 };

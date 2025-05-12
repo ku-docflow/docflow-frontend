@@ -10,6 +10,9 @@ import {
   quotePlugin,
   thematicBreakPlugin,
   markdownShortcutPlugin,
+  toolbarPlugin,
+  UndoRedo,
+  BoldItalicUnderlineToggles,
   } from "@mdxeditor/editor";
 
 import "@mdxeditor/editor/style.css";
@@ -58,7 +61,7 @@ const MarkdownStrip: React.FC = () => {
   };
 
   if (!focusedDocument) {
-    return <div className="markdown-strip">No document selected.</div>;
+    return <div className="markdown-strip">선택된 문서가 없습니다.</div>;
   }
 
   return (
@@ -74,14 +77,14 @@ const MarkdownStrip: React.FC = () => {
           quotePlugin(),
           thematicBreakPlugin(),
           markdownShortcutPlugin(),
-          // toolbarPlugin({
-          //   toolbarContents: () => (
-          //     <>
-          //       <UndoRedo />
-          //       <BoldItalicUnderlineToggles />
-          //     </>
-          //   )
-          // })
+          toolbarPlugin({
+            toolbarContents: () => (
+              <>
+                <UndoRedo />
+                <BoldItalicUnderlineToggles />
+              </>
+            )
+          })
         ]}
       />
     </div>

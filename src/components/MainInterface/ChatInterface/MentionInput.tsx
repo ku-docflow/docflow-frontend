@@ -3,11 +3,12 @@ import { useMentionInput } from "../../../hooks/ChatInterfaceHooks/useMentionInp
 import { Mention } from "../../../types/message";
 
 interface MentionInputProps {
-  mentionData: Mention[];
+  mentionData: Mention[] | null;
   onSubmit: (message: string, mentions: Mention[]) => void;
 }
 
 const MentionInput: React.FC<MentionInputProps> = ({ mentionData, onSubmit }) => {
+  const [mentions, setMentions] = React.useState<Mention[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const {
     input,
@@ -23,7 +24,7 @@ const MentionInput: React.FC<MentionInputProps> = ({ mentionData, onSubmit }) =>
       onSubmit(finalInput, mentions);
     }
     setInput("");
-  }, textareaRef);
+  }, mentions, setMentions, textareaRef);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,6 +32,8 @@ const MentionInput: React.FC<MentionInputProps> = ({ mentionData, onSubmit }) =>
     onSubmit(input, []);
     setInput("");
   };
+
+  const placeholder = mentionData? "@를 통해 생성봇을 호출해보세요!" : "";
 
   return (
     <form onSubmit={handleSubmit} className="chat-input-form" style={{ position: "relative" }}>
@@ -40,7 +43,7 @@ const MentionInput: React.FC<MentionInputProps> = ({ mentionData, onSubmit }) =>
         onChange={(e) => handleInputChange(e.target.value)}
         onKeyDown={handleKeyDown}
         className="mentions-input"
-        placeholder="@를 통해 검색봇과 정리봇을 호출해보세요!"
+        placeholder={placeholder}
       />
       <button type="submit" className="chat-send-button">Send</button>
 

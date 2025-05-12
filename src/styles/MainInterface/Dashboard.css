@@ -11,3 +11,22 @@
     font-weight: bold;
     border-bottom: 1px solid #ccc;
 }
+
+.dashboard-user-info {
+    margin-top: 1.5rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    max-width: 500px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.dashboard-user-info p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+}
+
+.dashboard-user-info strong {
+    color: #333;
+}

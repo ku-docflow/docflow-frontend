@@ -33,8 +33,9 @@ export const useStickyScroll = (
     const mentionedMe = lastMsg.mentions?.some(
       (mention) => mention.userId === currentUser.id
     );
+    const isMyOwnMessage = lastMsg.sender.id === currentUser.id;
 
-    if (isAtBottomRef.current || mentionedMe) {
+    if (isAtBottomRef.current || mentionedMe || isMyOwnMessage) {
       scrollToBottom();
     } else {
       setShowNewMsgAlert(true);

@@ -40,13 +40,34 @@
 
 .logout-button {
     font-size: 0.875rem;
-    color: #2563eb;
-    /* blue-600 */
+    color: #ff0000;
     background: none;
-    border: none;
+    border: 1px solid #ff0000;
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.75rem;
     cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 .logout-button:hover {
-    text-decoration: underline;
+    background-color: #ff0000;
+    color: white;
+    text-decoration: none;
+}
+
+.toggle-button {
+    font-size: 0.875rem;
+    color: #2563eb;
+    background: none;
+    border: 1px solid #2563eb;
+    border-radius: 0.375rem;
+    padding: 0.25rem 0.75rem;
+    cursor: pointer;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.toggle-button:hover {
+    background-color: #2563eb;
+    color: white;
+    text-decoration: none;
 }

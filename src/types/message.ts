@@ -51,4 +51,6 @@ export interface ChatBubbleProps {
   showProfile: boolean;
   mentions?: Mention[];
   onProfileClick?: (sender: Sender) => void;
+  selected?: boolean;
+  onSelect?: () => void;
 }

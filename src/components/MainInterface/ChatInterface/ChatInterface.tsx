@@ -1,15 +1,15 @@
-import React, { useRef, useMemo } from "react";
+import React, { useRef, useMemo, useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import ChatBubble from "./ChatBubbles";
 import MentionInput from "./MentionInput";
 import { createMentionData } from "../../../utils/ChatInterfaceUtils/mentionUtils";
 import "../../../styles/MainInterface/common/ChatInterface.css";
-import { Message, Mention } from "../../../types/message"
-import { getSocket } from "../../../services/socket";
 import { Team, Peer } from "../../../types/user";
 import { useResolveChatRoomId } from "../../../hooks/ChatInterfaceHooks/useResolveChatRoomId";
 import { useStickyScroll } from "../../../hooks/ChatInterfaceHooks/useStickyScroll";
+import { useHandleGenerationBotRequest } from "../../../hooks/ChatInterfaceHooks/useHandleGenerationBotRequest";
+import { useHandleSendMessage } from "../../../hooks/ChatInterfaceHooks/useHandleSendMessage";
 
 export interface MentionData {
   id: string;
@@ -25,6 +25,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
   const chatRoomId = useResolveChatRoomId(team, peer); //retrieves chat room id for communication
   const chatMessagesRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [GenerationBotTriggered, setGenerationBotTriggered] = useState(false);
+  const [selectedMessageIds, setSelectedMessageIds] = useState<number[]>([]); //선택된 메세지 id 저장할 구조체
+  const [querytext, setQueryText] = useState<string | null>(null); // 요약 요청 시 쿼리 텍스트 저장할 구조체
+  const [searchPending, setSearchPending] = useState(false); // 검색 요청 대기 상태 저장할 구조체
+  const isSearchBot = !team && !peer; // 검색봇인지 여부 확인
 
   const allMessagesByRoom = useSelector((state: RootState) => state.messages);
   const messages = useMemo(() => {
@@ -39,41 +44,34 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
     )
   );
 
-  const mentionData = createMentionData(peers); //mentionable peers를 담고있는 구조체
+  const mentionData = (team || peer)? createMentionData(peers, currentUser?.id) : null; // 검색봇 채팅의 경우, mention 기능을 차단
 
   const { scrollToBottom, showNewMsgAlert } = useStickyScroll(messages, currentUser, chatMessagesRef, messagesEndRef);
 
-  const handleSendMessage = async (text: string, mentions: Mention[]) => {
-    if (!text.trim() || !currentUser) return;
-
-    const newMessage: Message = {
-      chatroom_id: chatRoomId,
-      type: "default",
-      text: text,
-      sender: currentUser,
-      mentions,
-      shared_message_id: null,
-      shared_message_sender: null,
-    };
-
-    const socket = getSocket();
-    if (socket?.connected) {
-      socket.emit("send_message", {
-        chatroom_id: chatRoomId,
-        message: newMessage,
-      });
-    } else {
-      console.error("Socket is not connected");
-    }
-
-    const mentionedIds = mentions.map((m) => m.userId);
-    if (mentionedIds.includes("summarybot")) {
-      console.log(`[summaryBotDummyApi] called with chatroomId=${chatRoomId}, message=${text}`);
-    }
-    if (mentionedIds.includes("createbot")) {
-      console.log(`[createBotDummyApi] called with chatroomId=${chatRoomId}, message=${text}`);
-    }
+  const resetSelection = () => {
+    setSelectedMessageIds([]);
   };
+
+  const sendMessage = useHandleSendMessage(
+    chatRoomId,
+    currentUser,
+    team,
+    peer,
+    setGenerationBotTriggered,
+    setQueryText
+  );
+
+  const handleGenerationBotRequest = useHandleGenerationBotRequest(
+    selectedMessageIds,
+    chatRoomId,
+    currentUser,
+    team,
+    peer,
+    querytext,
+    resetSelection,
+    setGenerationBotTriggered,
+    setQueryText
+  );
 
   return (
     <div className="chat-interface" onDragOver={(e) => e.preventDefault()} onDrop={(e) => e.preventDefault()}>
@@ -102,7 +100,23 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
         </div>
       )}
 
-      <MentionInput mentionData={mentionData} onSubmit={handleSendMessage} />
+      {GenerationBotTriggered ? (
+        <div className="generate-instructions">
+          <p>문서 생성을 위해 시작과 끝 메시지를 선택하세요.</p>
+            <button
+              className="generate-button"
+              disabled={selectedMessageIds.length !== 2}
+              onClick={handleGenerationBotRequest}
+            >
+              문서 생성
+          </button>
+          <button className="generate-button" onClick={() => setGenerationBotTriggered(false)}>
+            취소
+          </button>
+        </div>
+      ): null}
+
+      <MentionInput mentionData={mentionData} onSubmit={sendMessage} />
     </div>
   );
 };

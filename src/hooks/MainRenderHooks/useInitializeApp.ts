@@ -21,6 +21,8 @@ export const useInitializeApp = () => {
           const initData = await fetchInitUserData();
           dispatch(setUserInitData(initData));
 
+          console.log(initData);
+
           const socket = connectSocket(user.uid);
           joinChatRooms(socket, initData);
           await fetchAndStoreDocumentHierarchy(initData, dispatch);

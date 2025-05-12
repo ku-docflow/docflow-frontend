@@ -29,3 +29,8 @@ export interface retrieveChatroomHistoryRequest {}
 export interface retrieveChatroomHistoryResponse {
   messages: Message[];
 }
+
+export interface SearchBotChatroomHistoryResponse {
+  chatroom_id: string;
+  messages: Message[];
+}

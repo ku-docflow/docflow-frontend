@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import "../../../styles/MainInterface/common/Settings.css"; // Optional: add styles for the settings modal
+import { patchUserName } from "../../../api/user";
 
 interface SettingsProps {
   onClose: () => void;
@@ -7,15 +8,28 @@ interface SettingsProps {
 }
 
 const Settings: React.FC<SettingsProps> = ({ onClose, onLogout }) => {
-  const [newName, setNewName] = useState("");
+  const [newFirstName, setNewFirstName] = useState("");
+  const [newLastName, setNewLastName] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
 
-  const handleNameChange = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleNameChange = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("Name changed to:", newName);
-    setNewName("");
-  };
+    if (newFirstName.trim() === "") {
+      alert("이름을 입력해주세요.");
+      return;
+    }
+    try {
+      const response = await patchUserName({ first_name: newFirstName, last_name: newLastName });
+      console.log("이름이 변경되었습니다", response);
+      alert("이름이 성공적으로 변경되었습니다."); //좀 더 이쁜 모습으로 다듬자
+      setNewFirstName("");
+      setNewLastName("");
+    } catch (error) {
+      console.error("Error changing name:", error);
+      alert("이름 변경에 실패했습니다.");
+    }
+  }
 
   const handlePasswordChange = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -41,9 +55,15 @@ const Settings: React.FC<SettingsProps> = ({ onClose, onLogout }) => {
             이름 변경:
             <input
               type="text"
-              placeholder="새 이름"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
+              placeholder="성"
+              value={newFirstName}
+              onChange={(e) => setNewFirstName(e.target.value)}
+            />
+            <input
+              type="text"
+              placeholder="이름"
+              value={newLastName}
+              onChange={(e) => setNewLastName(e.target.value)}
             />
           </label>
           <div className="modal-buttons">

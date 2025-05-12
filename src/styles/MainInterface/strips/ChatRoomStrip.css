@@ -1,14 +1,16 @@
-.searchbot-strip {
+/* ChatRoomStrip.css */
+
+.chatroom-strip-container {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
 
-.searchbot-strip-header {
+.chatroom-strip-header {
     padding: 1rem;
 }
 
-.searchbot-strip-title {
+.chatroom-strip-title {
     font-size: 1.125rem;
     font-weight: 600;
     margin-bottom: 0.5rem;
