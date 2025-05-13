@@ -3,6 +3,8 @@
     background-color: white;
     color: black;
     height: 100%;
+    display: flex;
+    flex-direction: column;
 }
 
 .chat-channel-title {
@@ -16,6 +18,14 @@
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+    flex: 1;
+}
+
+.chat-channel-list::-webkit-scrollbar {
+    display: none;
 }
 
 .chat-channel-item {
