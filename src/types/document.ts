@@ -31,14 +31,3 @@ export type DeleteDocumentRequest = void;
 export interface DeleteDocumentResponse {
   success: true;
 }
-
-export type docGenerationRequest = {
-  chatroom_id: Number;
-  first_msg_id: Number;
-  last_msg_id: Number;
-  user_query: string;
-};
-
-export type docGenerationResponse = {
-  document: Document;
-};

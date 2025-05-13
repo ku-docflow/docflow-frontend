@@ -5,8 +5,6 @@ import TopicBlock from "./TopicBlock";
 import { useCreateTopic } from "../../../../hooks/useCreateTopic";
 import '../../../../styles/WikiInterface/DocumentListStrip/DocumentListStrip.css';
 
-
-
 const DocumentListStrip: React.FC = () => {
   const hierarchy = useSelector((state: RootState) => state.documents.organizations);
   const focusedOrg = useSelector((state: RootState) => state.ui.selectedOrg);
@@ -66,7 +64,7 @@ const DocumentListStrip: React.FC = () => {
                   setNewTopicName("");
                 }
               }}
-              placeholder="Enter topic name"
+              placeholder="새 주제 ..."
             />
           </div>
         )}

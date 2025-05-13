@@ -1,5 +1,5 @@
 import { useCallback } from "react";
-import { generateDocument } from "../../api/document";
+import { generateDocument } from "../../api/gen-bot";
 import { Message } from "../../types/message";
 import { getSocket } from "../../services/socket";
 import { Peer, Team, User } from "../../types/user";
@@ -11,11 +11,13 @@ export const useHandleGenerationBotRequest = (
   team: Team | null,
   peer: Peer | null,
   query: string | null,
+  topic_id: string | null, //생성될 문서의 topic_id
   resetSelection: () => void,
-  setSummaryBotTriggered: (v: boolean) => void,
-  setQueryText: (v: string | null) => void
+  setGenerationBotTriggered: (v: boolean) => void,
+  setQueryText: (v: string | null) => void,
+  setSelectedMessageIds: (v: number[]) => void
 ) => {
-  const handleSummaryBotRequest = useCallback(async () => {
+  const handleGenerationBotRequest = useCallback(async () => {
     if (!query || selectedMessageIds.length !== 2) return;
 
     const [id1, id2] = selectedMessageIds;
@@ -27,7 +29,12 @@ export const useHandleGenerationBotRequest = (
       first_msg_id,
       last_msg_id,
       user_query: query,
+      topic_id,
     });
+
+    console.log("Document generation result:", result);
+
+    setSelectedMessageIds([]);
 
     if (!currentUser) return;
 
@@ -58,9 +65,9 @@ export const useHandleGenerationBotRequest = (
     }
 
     resetSelection();
-    setSummaryBotTriggered(false);
+    setGenerationBotTriggered(false);
     setQueryText(null);
   }, [selectedMessageIds, chatRoomId, currentUser, query, team, peer]);
 
-  return handleSummaryBotRequest;
+  return handleGenerationBotRequest;
 };

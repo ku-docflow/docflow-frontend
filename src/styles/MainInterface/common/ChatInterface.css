@@ -4,20 +4,15 @@
     height: 100%;
     overflow: hidden;
     background-color: #ffffff;
+    transition: background-color 0.3s ease;
     position: relative;
 }
 
-.chat-interface-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(128, 128, 128, 0.2);
-    z-index: 1;
-    pointer-events: none;
-    backdrop-filter: blur(2px);
+.chat-interface.selecting-mode {
+    background-color: #f0f0f0;
+    transition: background-color 0.3s ease;
 }
+
 .chat-messages {
     flex: 1;
     overflow-y: auto;
@@ -66,7 +61,7 @@
     align-items: center;
     justify-content: center;
     margin-left: 0;
-    padding: 0.5rem 1rem;
+    padding: 0.5rem 1.5rem;
     background-color: #3b82f6;
     color: #fff;
     border: none;
@@ -77,40 +72,13 @@
     border-bottom-left-radius: 0;
 }
 
-.chat-send-button::before {
-    content: '';
-    position: absolute;
-    left: 0;
-    bottom: 0;
-    width: 100%;
-    height: 0;
-    background: rgba(38, 166, 154, 1);
-    transition: height 0.3s ease;
-    z-index: 1;
-    pointer-events: none;
+.chat-send-button:hover {
+    background-color: #2563eb;
 }
 
-.chat-send-button::after{
-    content: '↑';
-    font-size: 1rem;
-    position: absolute;
-    top: 50%;   
-    left: 50%;
-    transform: translate(-50%, 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    z-index: 1;
-    color: black;
-    pointer-events: none;
-}
-
-.chat-send-button:hover::after{
-    transform: translate(-50%, -50%);
-    opacity: 1;
-}
-
-.chat-send-button:hover::before {
-    height: 100%;
+.chat-send-button:disabled {
+    background-color: #cbd5e1;
+    cursor: not-allowed;
 }
 
 .mention {
@@ -194,15 +162,22 @@
 }
 
 .generate-instructions {
-    z-index: 10;
-    position: relative;
-    margin: 12px;
-    padding: 16px;
-    background-color: #ffffffee;
-    /* slightly translucent */
+    position: absolute;
+    bottom: 5.5rem; /* sits above .chat-input-form */
+    left: 50%;
+    transform: translateX(-50%);
+    width: 50%;
+    background-color: #ffffff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     border-radius: 12px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    pointer-events: none;
     text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 1rem;
 }
 
 .generate-instructions p {
@@ -220,6 +195,7 @@
     cursor: pointer;
     font-weight: 500;
     transition: background-color 0.3s ease;
+    pointer-events: auto;
 }
 
 .generate-button:hover {
@@ -229,4 +205,18 @@
 .generate-button:disabled {
     background-color: #cbd5e1;
     cursor: not-allowed;
+}
+
+.topic-select {
+    display: block;
+    width: 100%;
+    padding: 0.5rem;
+    margin: 0.5rem 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    background-color: white;
+    font-size: 1rem;
+    z-index: 1000;
+    pointer-events: auto;
+    /* 부모가 relative일 경우 필요 */
 }

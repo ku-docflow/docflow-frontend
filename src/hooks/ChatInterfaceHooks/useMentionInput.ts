@@ -16,13 +16,32 @@ export const useMentionInput = (
   const handleInputChange = (value: string) => {
     setInput(value);
 
+    if (value.trim() === "") {
+      setMentions([]);
+      setIsMentioning(false);
+      setMentionCandidates([]);
+    }
+
     const lastAt = value.lastIndexOf("@");
     if (lastAt !== -1) {
       const query = value.slice(lastAt + 1);
 
-      const candidates = mentionData?.filter((item) =>
-        item.displayName?.startsWith(query)
+      const generationBotMentioned = mentions.some(
+        (m) => m.userId === "generationBot"
       );
+      const otherUserMentioned = mentions.some(
+        (m) => m.userId !== "generationBot"
+      );
+
+      const candidates = mentionData?.filter((item) => {
+        const alreadyMentioned = mentions.some((m) => m.userId === item.userId);
+        if (alreadyMentioned) return false;
+        if (generationBotMentioned && item.userId !== "generationBot")
+          return false;
+        if (otherUserMentioned && item.userId === "generationBot") return false;
+        return item.displayName?.startsWith(query);
+      });
+
       if (!candidates) return;
       setMentionCandidates(candidates);
       setIsMentioning(candidates.length > 0);
@@ -88,6 +107,10 @@ export const useMentionInput = (
   };
 
   const selectCandidate = (candidate: Mention) => {
+    if (mentions.some((m) => m.userId === candidate.userId)) {
+      setIsMentioning(false);
+      return;
+    }
     const textarea = textareaRef.current;
     if (!textarea) return;
 

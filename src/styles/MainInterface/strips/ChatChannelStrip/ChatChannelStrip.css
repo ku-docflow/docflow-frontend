@@ -30,3 +30,16 @@
 .chat-channel-item:hover {
     background-color: #f0f0f0;
 }
+
+.chat-channel-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background: transparent;
+    font-size: 14px;
+}
+
+.chat-channel-input:focus {
+    outline:none;
+    box-shadow:none;
+}

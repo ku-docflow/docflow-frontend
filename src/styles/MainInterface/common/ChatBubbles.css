@@ -83,7 +83,6 @@
     display: inline-block;
 }
 
-/* Chat bubble color variations */
 .chat-bubble.right {
     background-color: #158ffe;
     color: white;
@@ -143,4 +142,34 @@
     text-align: right;
     margin-top: 4px;
     opacity: 0.7;
+}
+
+/* Selectable bubble effects */
+
+.chat-bubble-selector {
+    position: absolute;
+    top: -6px;
+    right: -6px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: transparent;
+    border: 2px solid #1aff00;
+    z-index: 5;
+    transition: transform 0.2s ease, background-color 0.2s ease;
+}
+
+.chat-bubble-selector.selected {
+    background: #1aff00;
+}
+
+.chat-bubble.selectable {
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.chat-bubble.selectable:hover,
+.chat-bubble.selectable:hover .chat-bubble-selector {
+  transform: scale(1.2);
+  z-index: 5;
 }

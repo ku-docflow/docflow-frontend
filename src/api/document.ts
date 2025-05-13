@@ -8,8 +8,6 @@ import {
   UpdateDocumentRequest,
   UpdateDocumentResponse,
   DeleteDocumentResponse,
-  docGenerationRequest,
-  docGenerationResponse,
 } from "../types/document";
 
 export const createDocument = async (
@@ -50,13 +48,4 @@ export const deleteDocument = async (
   id: number
 ): Promise<DeleteDocumentResponse> => {
   return del<DeleteDocumentResponse>(`/document/${id}`);
-};
-
-export const generateDocument = async (
-  data: docGenerationRequest
-): Promise<docGenerationResponse> => {
-  return post<docGenerationResponse, docGenerationRequest>(
-    "/document/generate",
-    data
-  );
 };

@@ -9,7 +9,9 @@ export const useHandleSendMessage = (
   team: Team | null,
   peer: Peer | null,
   setSummaryBotTriggered: (v: boolean) => void,
-  setQueryText: (v: string | null) => void
+  setQueryText: (v: string | null) => void,
+  setSearchPending: (v: boolean) => void,
+  isSearchBot?: boolean
 ) => {
   const sendMessage = async (text: string, mentions: Mention[]) => {
     if (!text?.trim() || !currentUser) return;
@@ -38,6 +40,10 @@ export const useHandleSendMessage = (
         is_searchbot: !team && !peer,
         message: newMessage,
       });
+
+      if (isSearchBot) {
+        setSearchPending(true);
+      }
     } else {
       console.error("Socket is not connected");
     }

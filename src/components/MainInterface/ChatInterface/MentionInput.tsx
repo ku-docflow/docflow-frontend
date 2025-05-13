@@ -5,9 +5,10 @@ import { Mention } from "../../../types/message";
 interface MentionInputProps {
   mentionData: Mention[] | null;
   onSubmit: (message: string, mentions: Mention[]) => void;
+  disabled: boolean;
 }
 
-const MentionInput: React.FC<MentionInputProps> = ({ mentionData, onSubmit }) => {
+const MentionInput: React.FC<MentionInputProps> = ({ mentionData, onSubmit, disabled }) => {
   const [mentions, setMentions] = React.useState<Mention[]>([]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const {
@@ -44,8 +45,9 @@ const MentionInput: React.FC<MentionInputProps> = ({ mentionData, onSubmit }) =>
         onKeyDown={handleKeyDown}
         className="mentions-input"
         placeholder={placeholder}
+        disabled={disabled}
       />
-      <button type="submit" className="chat-send-button">Send</button>
+      <button type="submit" className="chat-send-button" disabled={disabled}>{disabled? "···" : "↑"}</button>
 
       {isMentioning && (
         <div className="mentions-box">

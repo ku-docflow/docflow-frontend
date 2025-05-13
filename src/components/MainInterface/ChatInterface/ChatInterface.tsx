@@ -1,4 +1,4 @@
-import React, { useRef, useMemo, useState } from "react";
+import React, { useRef, useMemo, useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
 import ChatBubble from "./ChatBubbles";
@@ -10,6 +10,7 @@ import { useResolveChatRoomId } from "../../../hooks/ChatInterfaceHooks/useResol
 import { useStickyScroll } from "../../../hooks/ChatInterfaceHooks/useStickyScroll";
 import { useHandleGenerationBotRequest } from "../../../hooks/ChatInterfaceHooks/useHandleGenerationBotRequest";
 import { useHandleSendMessage } from "../../../hooks/ChatInterfaceHooks/useHandleSendMessage";
+import { useExtractTopicsOfOrgs } from "../../../hooks/ChatInterfaceHooks/useExtractTopicsOfOrgs";
 
 export interface MentionData {
   id: string;
@@ -25,10 +26,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
   const chatRoomId = useResolveChatRoomId(team, peer); //retrieves chat room id for communication
   const chatMessagesRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [GenerationBotTriggered, setGenerationBotTriggered] = useState(false);
+  const [generationBotTriggered, setGenerationBotTriggered] = useState(false);
   const [selectedMessageIds, setSelectedMessageIds] = useState<number[]>([]); //선택된 메세지 id 저장할 구조체
   const [querytext, setQueryText] = useState<string | null>(null); // 요약 요청 시 쿼리 텍스트 저장할 구조체
   const [searchPending, setSearchPending] = useState(false); // 검색 요청 대기 상태 저장할 구조체
+  const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
   const isSearchBot = !team && !peer; // 검색봇인지 여부 확인
 
   const allMessagesByRoom = useSelector((state: RootState) => state.messages);
@@ -52,13 +54,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
     setSelectedMessageIds([]);
   };
 
+  const topics = useExtractTopicsOfOrgs();
+  // console.log("ChatInterface document topics: ", topics);
+
   const sendMessage = useHandleSendMessage(
     chatRoomId,
     currentUser,
     team,
     peer,
     setGenerationBotTriggered,
-    setQueryText
+    setQueryText,
+    setSearchPending,
+    isSearchBot
   );
 
   const handleGenerationBotRequest = useHandleGenerationBotRequest(
@@ -68,13 +75,25 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
     team,
     peer,
     querytext,
+    selectedTopicId,
     resetSelection,
     setGenerationBotTriggered,
-    setQueryText
+    setQueryText,
+    setSelectedMessageIds
   );
+  
+  const disabled = (isSearchBot && searchPending) || generationBotTriggered;
+
+  useEffect(() => {
+    if (!isSearchBot || !searchPending) return;
+    const latest = messages[messages.length - 1];
+    if (latest && latest.sender.id !== currentUser?.id) {
+      setSearchPending(false);
+    }
+  }, [messages, searchPending, isSearchBot, currentUser]);
 
   return (
-    <div className="chat-interface" onDragOver={(e) => e.preventDefault()} onDrop={(e) => e.preventDefault()}>
+    <div className={`chat-interface ${generationBotTriggered ? "selecting-mode" : ""}`} onDragOver={(e) => e.preventDefault()} onDrop={(e) => e.preventDefault()}>
       <div className="chat-messages" ref={chatMessagesRef}>
         {messages.map((msg, index) => {
           const prevMessage = messages[index - 1];
@@ -88,6 +107,16 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
               isCurrentUser={msg.sender.id === currentUser!.id}
               showProfile={showProfile}
               mentions={msg.mentions}
+              isSelectable={generationBotTriggered}
+              isSelected={selectedMessageIds.includes(Number(msg.id))}
+              onSelect={() => {
+                if (selectedMessageIds.includes(Number(msg.id))) {
+                  setSelectedMessageIds(selectedMessageIds.filter(id => id !== Number(msg.id)));
+                } else if (selectedMessageIds.length < 2) {
+                  setSelectedMessageIds([...selectedMessageIds, Number(msg.id)]);
+                }
+              }}
+
             />
           );
         })}
@@ -100,23 +129,35 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
         </div>
       )}
 
-      {GenerationBotTriggered ? (
+      {generationBotTriggered ? (
         <div className="generate-instructions">
-          <p>문서 생성을 위해 시작과 끝 메시지를 선택하세요.</p>
-            <button
-              className="generate-button"
-              disabled={selectedMessageIds.length !== 2}
-              onClick={handleGenerationBotRequest}
-            >
-              문서 생성
+          <p>문서 생성을 위해 문서 주제, 시작과 끝 메시지를 선택하세요.</p>
+          <select
+            value={selectedTopicId ?? ""}
+            onChange={(e) => setSelectedTopicId(e.target.value)}
+            className="topic-select"
+          >
+            <option value="" disabled>토픽을 선택하세요</option>
+            {topics?.map((topic) => (
+              <option key={topic.topic_id} value={topic.topic_id}>
+                {topic.topic_title}
+              </option>
+            ))}
+          </select>
+          <button
+            className="generate-button"
+            disabled={selectedMessageIds.length !== 2 || selectedTopicId === null}
+            onClick={() => selectedTopicId && handleGenerationBotRequest()}
+          >
+            문서 생성
           </button>
-          <button className="generate-button" onClick={() => setGenerationBotTriggered(false)}>
+          <button className="generate-button" onClick={() => { setGenerationBotTriggered(false); setSelectedMessageIds([]); setSelectedTopicId(null); }}>
             취소
           </button>
         </div>
       ): null}
 
-      <MentionInput mentionData={mentionData} onSubmit={sendMessage} />
+      <MentionInput mentionData={mentionData} onSubmit={sendMessage} disabled={disabled} />
     </div>
   );
 };

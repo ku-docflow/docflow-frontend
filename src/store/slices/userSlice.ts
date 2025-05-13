@@ -1,14 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { InitUserResponse, Organization, User } from "../../types/user";
 
-// interface UserInfo {
-//   id: string;
-//   first_name: string;
-//   last_name: string;
-//   email: string;
-//   search_bot_chatroom_id?: string;
-// }
-
 interface UserState {
   user: User | null;
   orgs: Organization[];
