@@ -5,16 +5,42 @@ import { setSelectedOrg, resetSelection } from "../../../../store/slices/uiSlice
 import '../../../../styles/MainInterface/strips/OrganizationStrip/OrganizationStripButton.css';
 import '../../../../styles/MainInterface/strips/OrganizationStrip/OrganizationStrip.css';
 import Settings from '../../common/Settings';
-import AddOrganizationModal from "./AddOrganizationModel";
 import { FaCog } from "react-icons/fa";
+import { createOrganization } from "../../../../api/organization";
 
 const OrganizationStrip: React.FC = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const dispatch = useDispatch();
   const organizations = useSelector((state: RootState) => state.user.orgs || []);
   const handleProfileClick = () => {
     dispatch(resetSelection());
+  };
+  const user = useSelector((state: RootState) => state.auth.user);
+
+  const [isAdding, setIsAdding] = useState(false);
+  const [newOrgName, setNewOrgName] = useState("");
+
+  const handleCreateOrg = async () => {
+    const trimmed = newOrgName.trim();
+    if (!trimmed) {
+      setIsAdding(false);
+      setNewOrgName("");
+      return;
+    }
+
+    try {
+      if (!user?.email) throw new Error("User email not found");
+
+      await createOrganization({
+        name: newOrgName.trim(),
+        email: user.email,
+      });
+    } catch (err) {
+      console.error("Failed to create organization:", err);
+    } finally {
+      setIsAdding(false);
+      setNewOrgName("");
+    }
   };
 
   return (
@@ -39,17 +65,34 @@ const OrganizationStrip: React.FC = () => {
           </button>
         ))}
 
-        <button
-          className="OrganizationStripButton"
-          onClick={() => setIsModalOpen(true)}
-        >
-          +
-        </button>
+        {!isAdding && (
+          <button
+            className="OrganizationStripButton"
+            onClick={() => setIsAdding(true)}
+          >
+            +
+          </button>
+        )}
 
-        <AddOrganizationModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
-        />
+        {isAdding && (
+          <li className="OrganizationStripButton">
+            <input
+              autoFocus
+              type="text"
+              value={newOrgName}
+              onChange={(e) => setNewOrgName(e.target.value)}
+              onBlur={handleCreateOrg}
+              onKeyDown={(e) => {
+                if (e.key === "Enter") handleCreateOrg();
+                if (e.key === "Escape") {
+                  setIsAdding(false);
+                  setNewOrgName("");
+                }
+              }}
+              className="OrganizationStripButton-input"
+            />
+          </li>
+        )}
       </div>
 
       <div className="organization-strip-settings">

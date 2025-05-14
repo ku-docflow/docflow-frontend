@@ -11,7 +11,6 @@ const ChatChannelStrip: React.FC = () => {
   const organizations = useSelector((state: RootState) => state.user.orgs);
   const currentUser = useSelector((state: RootState) => state.user.user);
   
-
   const [isAdding, setIsAdding] = useState(false);
   const [newTeamName, setNewTeamName] = useState("");
 
@@ -20,8 +19,6 @@ const ChatChannelStrip: React.FC = () => {
   if (!org || !currentUser) return null;
 
   const authorityToCreateNewTeam = org.admins.includes(currentUser.id);
-
-
 
   const handleCreateTeam = async () => {
     const trimmed = newTeamName.trim();
