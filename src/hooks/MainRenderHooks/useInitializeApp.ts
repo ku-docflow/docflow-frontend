@@ -35,6 +35,7 @@ export const useInitializeApp = () => {
           });
 
           socket.on("receive_message", (message) => {
+            console.log("Received message:", message);
             dispatch(appendBufferedMessage(message));
           });
 

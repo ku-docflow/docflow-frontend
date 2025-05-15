@@ -1,46 +1,27 @@
-import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { RootState } from "../../../../store";
+import React from "react";
+import { useDispatch } from "react-redux";
 import { setSelectedTeam } from "../../../../store/slices/uiSlice";
 import "../../../../styles/MainInterface/strips/ChatChannelStrip/ChatChannelStrip.css";
-import { createTeam } from "../../../../api/team";
+import { useChatChannelStrip } from "../../../../hooks/ChatInterfaceHooks/ChatChannelStripHooks/useChatChannelStrip";
 
 const ChatChannelStrip: React.FC = () => {
   const dispatch = useDispatch();
-  const selectedOrg = useSelector((state: RootState) => state.ui.selectedOrg);
-  const organizations = useSelector((state: RootState) => state.user.orgs);
-  const currentUser = useSelector((state: RootState) => state.user.user);
-  
-  const [isAdding, setIsAdding] = useState(false);
-  const [newTeamName, setNewTeamName] = useState("");
+  const context = useChatChannelStrip();
+  if (!context) return null;
 
-  const org = organizations.find((o) => o.id === selectedOrg?.id);
+  const {
+    org,
+    currentUser,
+    isAdding,
+    newTeamName,
+    setIsAdding,
+    setNewTeamName,
+    handleCreateTeam,
+    handleKeyDown,
+    authorityToCreateNewTeam,
+  } = context;
 
   if (!org || !currentUser) return null;
-
-  const authorityToCreateNewTeam = org.admins.includes(currentUser.id);
-
-  const handleCreateTeam = async () => {
-    const trimmed = newTeamName.trim();
-    if (!trimmed) {
-      setIsAdding(false);
-      setNewTeamName("");
-      return;
-    }
-
-    try {
-      await createTeam({
-        name: trimmed,
-        email: currentUser.email,
-        organization_id: Number(org.id),
-      });
-    } catch (err) {
-      console.error("Failed to create team:", err);
-    } finally {
-      setIsAdding(false);
-      setNewTeamName("");
-    }
-  };
 
   return (
     <div className="chat-channel-strip">
@@ -70,13 +51,7 @@ const ChatChannelStrip: React.FC = () => {
               value={newTeamName}
               onChange={(e) => setNewTeamName(e.target.value)}
               onBlur={handleCreateTeam}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleCreateTeam();
-                if (e.key === "Escape") {
-                  setIsAdding(false);
-                  setNewTeamName("");
-                }
-              }}
+              onKeyDown={handleKeyDown}
               className="chat-channel-input"
             />
           </li>

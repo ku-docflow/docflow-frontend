@@ -1,22 +1,16 @@
 import React from 'react';
 import { auth } from "../../services/firebase";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import '../../styles/common/Header.css'; 
 import { RootState } from '../../store';
-import { resetSelection, setSelectedRenderMode } from "../../store/slices/uiSlice";
-
+import { useRenderModeToggle } from "../../hooks/common/useRenderModeToggle";
 
 const Header: React.FC = () => {
-    const dispatch = useDispatch();
     const focusedRenderMode = useSelector((state: RootState) => state.ui.selectedRenderMode);
+    const { toggleRenderMode } = useRenderModeToggle();
 
     const handleLogout = () => {
         auth.signOut();
-    };
-
-    const toggleRenderMode = (CurrentRendertype: string) => {
-        CurrentRendertype === 'wiki' ? dispatch(setSelectedRenderMode('chat')) : dispatch(setSelectedRenderMode('wiki'));
-        dispatch(resetSelection());
     };
 
     return (
@@ -27,7 +21,7 @@ const Header: React.FC = () => {
             </div>
             <div className="right-group">
                 <button
-                    onClick={() => toggleRenderMode(focusedRenderMode)}
+                    onClick={() => toggleRenderMode(focusedRenderMode as "wiki" | "chat")}
                     className="toggle-button"
                 >
                     {focusedRenderMode === 'wiki' ? 'Chat' : 'Wiki'}

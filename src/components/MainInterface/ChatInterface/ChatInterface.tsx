@@ -97,7 +97,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
       <div className="chat-messages" ref={chatMessagesRef}>
         {messages.map((msg, index) => {
           const prevMessage = messages[index - 1];
-          const showProfile = !prevMessage || prevMessage.sender.id !== msg.sender.id;
+          const showProfile = !prevMessage || prevMessage.sender.id !== msg.sender.id || !msg.sender;
           return (
             <ChatBubble
               key={msg.id}

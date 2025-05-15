@@ -1,6 +1,6 @@
 // src/pages/RegisterPage.tsx
 import React from "react";
-import SignUpForm from "../components/MainInterface/SignUpForm/SignUpForm";
+import SignUpForm from "../components/common/SignUpForm/SignUpForm";
 
 const SignupPage: React.FC = () => {
   return (

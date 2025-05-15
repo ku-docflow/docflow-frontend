@@ -24,18 +24,6 @@ export const useHandleGenerationBotRequest = (
     const first_msg_id = Math.min(id1, id2);
     const last_msg_id = Math.max(id1, id2);
 
-    const result = await generateDocument({
-      chatroom_id: Number(chatRoomId),
-      first_msg_id,
-      last_msg_id,
-      user_query: query,
-      topic_id,
-    });
-
-    console.log("Document generation result:", result);
-
-    setSelectedMessageIds([]);
-
     if (!currentUser) return;
 
     const newMessage: Message = {
@@ -63,6 +51,18 @@ export const useHandleGenerationBotRequest = (
         message: newMessage,
       });
     }
+
+    const result = await generateDocument({
+      chatroom_id: Number(chatRoomId),
+      first_msg_id,
+      last_msg_id,
+      user_query: query,
+      topic_id,
+    });
+
+    console.log("Document generation result:", result);
+
+    setSelectedMessageIds([]);
 
     resetSelection();
     setGenerationBotTriggered(false);

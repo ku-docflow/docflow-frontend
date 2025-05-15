@@ -1,4 +1,4 @@
-import React, {useState, ReactElement} from "react";
+import React, { ReactElement } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "../../../../store";
 import { setSelectedOrg, resetSelection } from "../../../../store/slices/uiSlice";
@@ -6,41 +6,24 @@ import '../../../../styles/MainInterface/strips/OrganizationStrip/OrganizationSt
 import '../../../../styles/MainInterface/strips/OrganizationStrip/OrganizationStrip.css';
 import Settings from '../../common/Settings';
 import { FaCog } from "react-icons/fa";
-import { createOrganization } from "../../../../api/organization";
+import { useOrganizationStrip } from "../../../../hooks/ChatInterfaceHooks/OrganizationStripHooks/useOrganizationStrip";
 
 const OrganizationStrip: React.FC = () => {
-  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const dispatch = useDispatch();
   const organizations = useSelector((state: RootState) => state.user.orgs || []);
+  const {
+    isSettingsOpen,
+    isAdding,
+    newOrgName,
+    setIsSettingsOpen,
+    setIsAdding,
+    setNewOrgName,
+    handleCreateOrg,
+    handleKeyDown,
+  } = useOrganizationStrip();
+
   const handleProfileClick = () => {
     dispatch(resetSelection());
-  };
-  const user = useSelector((state: RootState) => state.auth.user);
-
-  const [isAdding, setIsAdding] = useState(false);
-  const [newOrgName, setNewOrgName] = useState("");
-
-  const handleCreateOrg = async () => {
-    const trimmed = newOrgName.trim();
-    if (!trimmed) {
-      setIsAdding(false);
-      setNewOrgName("");
-      return;
-    }
-
-    try {
-      if (!user?.email) throw new Error("User email not found");
-
-      await createOrganization({
-        name: newOrgName.trim(),
-        email: user.email,
-      });
-    } catch (err) {
-      console.error("Failed to create organization:", err);
-    } finally {
-      setIsAdding(false);
-      setNewOrgName("");
-    }
   };
 
   return (
@@ -82,13 +65,7 @@ const OrganizationStrip: React.FC = () => {
               value={newOrgName}
               onChange={(e) => setNewOrgName(e.target.value)}
               onBlur={handleCreateOrg}
-              onKeyDown={(e) => {
-                if (e.key === "Enter") handleCreateOrg();
-                if (e.key === "Escape") {
-                  setIsAdding(false);
-                  setNewOrgName("");
-                }
-              }}
+              onKeyDown={handleKeyDown}
               className="OrganizationStripButton-input"
             />
           </li>
