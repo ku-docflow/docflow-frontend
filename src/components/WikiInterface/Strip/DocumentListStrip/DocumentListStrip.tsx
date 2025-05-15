@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../../store";
 import TopicBlock from "./TopicBlock";
-import { useCreateTopic } from "../../../../hooks/useCreateTopic";
+import { useDocumentListStrip } from "../../../../hooks/WikiInterfaceHooks/DocumentListStrip/useDocumentListStrip";
 import '../../../../styles/WikiInterface/DocumentListStrip/DocumentListStrip.css';
 
 const DocumentListStrip: React.FC = () => {
@@ -10,26 +10,15 @@ const DocumentListStrip: React.FC = () => {
   const focusedOrg = useSelector((state: RootState) => state.ui.selectedOrg);
   const orgData = hierarchy.find(o => o.organization.id === focusedOrg?.id);
 
-  const [isAdding, setIsAdding] = useState(false);
-  const [newTopicName, setNewTopicName] = useState("");
-
-  const { handleCreateTopic } = useCreateTopic(() => {
-    setIsAdding(false);
-    setNewTopicName("");
-    // automatic rendering expected
-  });
+  const {
+    isAdding,
+    newTopicName,
+    setIsAdding,
+    setNewTopicName,
+    handleAddTopic
+  } = useDocumentListStrip(orgData?.organization.id);
 
   if (!orgData) return <div className="document-list-strip">No topics found.</div>;
-
-  const handleAddTopic = () => {
-    const trimmed = newTopicName.trim();
-    if (!trimmed) {
-      setIsAdding(false);
-      setNewTopicName("");
-      return;
-    }
-    handleCreateTopic(orgData.organization.id, trimmed);
-  };
 
   return (
     <div className="document-list-strip">
@@ -46,6 +35,7 @@ const DocumentListStrip: React.FC = () => {
       <div className="topic-list">
         {orgData.topics.map((topicBlock) => (
           <TopicBlock
+            key={topicBlock.topic.id}
             topicBlock={topicBlock}
           />
         ))}

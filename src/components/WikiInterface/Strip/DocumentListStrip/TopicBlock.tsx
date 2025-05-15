@@ -1,13 +1,10 @@
-// src/components/WikiInterface/Strip/TopicBlock.tsx
-import React, { useState } from "react";
+// src/components/WikiInterface/Strip/DocumentListStrip/TopicBlock.tsx
+import React from "react";
 import DocumentBlock from "./DocumentBlock";
 import { Topic } from "../../../../types/topic";
 import { Document } from "../../../../types/document";
 import "../../../../styles/WikiInterface/DocumentListStrip/TopicBlock.css";
-import { useSelector, useDispatch } from "react-redux";
-import { setSelectedDocument } from "../../../../store/slices/uiSlice";
-import { RootState } from "../../../../store/index";
-import { createDocument } from "../../../../api/document";
+import { useTopicBlock } from "../../../../hooks/WikiInterfaceHooks/useTopicBlock";
 
 interface TopicWithDocuments {
   topic: Topic;
@@ -19,31 +16,12 @@ interface TopicBlockProps {
 }
 
 const TopicBlock: React.FC<TopicBlockProps> = ({ topicBlock }) => {
-  const [expanded, setExpanded] = useState(false);
-  const [isCollapsing, setIsCollapsing] = useState(false);
-  const dispatch = useDispatch();
-
-  const toggleTopic = () => {
-    if (expanded) {
-      setIsCollapsing(true);
-      setExpanded(false);
-      setTimeout(() => setIsCollapsing(false), 300);
-    } else {
-      setExpanded(true);
-    }
-  };
-
-  const handleCreateDocument = async () => {
-    try {
-      const doc = await createDocument({
-        topic_id: topicBlock.topic.id,
-        text: "새 문서",
-      });
-      dispatch(setSelectedDocument(doc)); //set it so that the newly created doc is focused
-    } catch (err) {
-      console.error("Failed to create new document to server:", err)
-    }
-  };
+  const {
+    expanded,
+    isCollapsing,
+    toggleTopic,
+    handleCreateDocument,
+  } = useTopicBlock(topicBlock.topic.id);
 
   return (
     <div className={`TopicBlock ${expanded ? "expanded" : ""} ${isCollapsing ? "collapsing" : ""}`}>
@@ -59,7 +37,7 @@ const TopicBlock: React.FC<TopicBlockProps> = ({ topicBlock }) => {
       </div>
       <div className="TopicBlock-content">
         {topicBlock.documents.map((doc) => (
-          <DocumentBlock document={doc} />
+          <DocumentBlock key={doc.id} document={doc} />
         ))}
       </div>
     </div>

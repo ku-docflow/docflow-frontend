@@ -1,4 +1,3 @@
-// src/services/sendMessage.ts
 import { getSocket } from "./socket";
 import { Message } from "../types/message";
 

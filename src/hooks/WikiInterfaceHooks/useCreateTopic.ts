@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createTopic } from "../api/topic";
+import { createTopic } from "../../api/topic";
 
 export function useCreateTopic(onSuccess?: () => void) {
   const [loading, setLoading] = useState(false);

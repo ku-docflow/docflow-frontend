@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
+import { useTimeout } from "../../hooks/common/useTimeout";
 
 interface InteractionGuardProps {
-  duration: number; 
+  duration: number;
   trigger: any;
   children: React.ReactNode;
 }
@@ -11,9 +12,9 @@ const InteractionGuard: React.FC<InteractionGuardProps> = ({ duration, trigger, 
 
   useEffect(() => {
     setDisabled(true);
-    const timer = setTimeout(() => setDisabled(false), duration);
-    return () => clearTimeout(timer);
-  }, [trigger, duration]);
+  }, [trigger]);
+
+  useTimeout(() => setDisabled(false), duration);
 
   return (
     <div style={{ pointerEvents: disabled ? "none" : "auto" }}>

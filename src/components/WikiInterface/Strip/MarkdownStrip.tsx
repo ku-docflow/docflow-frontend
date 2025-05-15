@@ -1,10 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
-import { updateDocument } from "../../../api/document";
 import {
   MDXEditor,
-  MDXEditorMethods,
   headingsPlugin,
   listsPlugin,
   quotePlugin,
@@ -13,52 +11,15 @@ import {
   toolbarPlugin,
   UndoRedo,
   BoldItalicUnderlineToggles,
-  } from "@mdxeditor/editor";
+} from "@mdxeditor/editor";
 
 import "@mdxeditor/editor/style.css";
 import '../../../styles/WikiInterface/MarkdownStrip/MarkdownStrip.css';
+import { useMarkdownEditor } from "../../../hooks/WikiInterfaceHooks/useMakrdownStrip";
 
 const MarkdownStrip: React.FC = () => {
   const focusedDocument = useSelector((state: RootState) => state.ui.selectedDocument);
-  const editorRef = useRef<MDXEditorMethods>(null);
-  const timeoutRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    if (!editorRef.current) return;
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if ((e.ctrlKey || e.metaKey) && e.key === "s") {
-        e.preventDefault();
-        if (focusedDocument && editorRef.current) {
-          const markdown = editorRef.current.getMarkdown();
-          updateDocument(focusedDocument.id, { text: markdown });
-        }
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-    return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [focusedDocument]);
-
-  useEffect(() => {
-    if (!editorRef.current) return;
-
-    if (focusedDocument) {
-      editorRef.current.setMarkdown(focusedDocument.text || "");
-    } else {
-      editorRef.current.setMarkdown(""); 
-    }
-  }, [focusedDocument]);
-
-  const handleChange = () => {
-
-    if (timeoutRef.current) clearTimeout(timeoutRef.current);
-
-    timeoutRef.current = setTimeout(() => {
-      if (!focusedDocument || !editorRef.current) return;
-      const markdown = editorRef.current.getMarkdown();
-      updateDocument(focusedDocument.id, { text: markdown });
-    }, 5000);
-  };
+  const { editorRef, handleChange } = useMarkdownEditor(focusedDocument);
 
   if (!focusedDocument) {
     return <div className="markdown-strip">선택된 문서가 없습니다.</div>;
@@ -83,8 +44,8 @@ const MarkdownStrip: React.FC = () => {
                 <UndoRedo />
                 <BoldItalicUnderlineToggles />
               </>
-            )
-          })
+            ),
+          }),
         ]}
       />
     </div>

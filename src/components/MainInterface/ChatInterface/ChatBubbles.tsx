@@ -31,6 +31,8 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
     }
   };
 
+  const name = [sender.first_name, sender.last_name].filter(Boolean).join(" ");
+
   return (
     <div 
       className={`chat-bubble-wrapper ${isCurrentUser ? "align-right" : "align-left"}`}
@@ -55,7 +57,7 @@ const ChatBubble: React.FC<ChatBubbleProps> = ({
           )}
           <div className="chat-bubble-content">
             {(!isCurrentUser && showProfile) && (
-              <div className="chat-bubble-sender">{sender.first_name + sender.last_name}</div>
+              <div className="chat-bubble-sender">{name}</div>
             )}
             <div className="chat-bubble-message">{message}</div>
             {timestamp && (
