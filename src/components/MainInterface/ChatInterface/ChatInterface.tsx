@@ -11,6 +11,7 @@ import { useStickyScroll } from "../../../hooks/ChatInterfaceHooks/useStickyScro
 import { useHandleGenerationBotRequest } from "../../../hooks/ChatInterfaceHooks/useHandleGenerationBotRequest";
 import { useHandleSendMessage } from "../../../hooks/ChatInterfaceHooks/useHandleSendMessage";
 import { useExtractTopicsOfOrgs } from "../../../hooks/ChatInterfaceHooks/useExtractTopicsOfOrgs";
+import { Message } from "../../../types/message";
 
 export interface MentionData {
   id: string;
@@ -31,6 +32,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
   const [querytext, setQueryText] = useState<string | null>(null); // 요약 요청 시 쿼리 텍스트 저장할 구조체
   const [searchPending, setSearchPending] = useState(false); // 검색 요청 대기 상태 저장할 구조체
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
+  const [sharedMessage, setSharedMessage] = useState<Message | null>(null);
   const isSearchBot = !team && !peer; // 검색봇인지 여부 확인
 
   const allMessagesByRoom = useSelector((state: RootState) => state.messages);
@@ -65,7 +67,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
     setGenerationBotTriggered,
     setQueryText,
     setSearchPending,
-    isSearchBot
   );
 
   const handleGenerationBotRequest = useHandleGenerationBotRequest(
@@ -81,6 +82,31 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
     setQueryText,
     setSelectedMessageIds
   );
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const data = e.dataTransfer.getData("application/json");
+    try {
+      const parsed = JSON.parse(data);
+      if (parsed.type === "shared_message") {
+        const tempMessage: Message = {
+          id: parsed.shared_message_id,
+          chatroom_id: chatRoomId,
+          type: "shared",
+          text: parsed.message,
+          sender: currentUser!,
+          mentions: [],
+          shared_message_id: parsed.shared_message_id,
+          shared_message_sender: parsed.sender,
+          timestamp: parsed.timestamp,
+        };
+        setSharedMessage(tempMessage);
+      }
+      console.log("Dropped message:", parsed);
+    } catch (err) {
+      console.error("Invalid dropped message format:", err);
+    }
+  };
   
   const disabled = (isSearchBot && searchPending) || generationBotTriggered;
 
@@ -93,7 +119,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
   }, [messages, searchPending, isSearchBot, currentUser]);
 
   return (
-    <div className={`chat-interface ${generationBotTriggered ? "selecting-mode" : ""}`} onDragOver={(e) => e.preventDefault()} onDrop={(e) => e.preventDefault()}>
+    <div
+      className={`chat-interface ${generationBotTriggered ? "selecting-mode" : ""}`}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={handleDrop}
+    >
       <div className="chat-messages" ref={chatMessagesRef}>
         {messages.map((msg, index) => {
           const prevMessage = messages[index - 1];
@@ -101,12 +131,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
           return (
             <ChatBubble
               key={msg.id}
-              message={msg.text}
-              sender={msg.sender}
-              timestamp={msg.timestamp}
+              message={msg}
               isCurrentUser={msg.sender.id === currentUser!.id}
               showProfile={showProfile}
-              mentions={msg.mentions}
               isSelectable={generationBotTriggered}
               isSelected={selectedMessageIds.includes(Number(msg.id))}
               onSelect={() => {
@@ -116,7 +143,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
                   setSelectedMessageIds([...selectedMessageIds, Number(msg.id)]);
                 }
               }}
-
             />
           );
         })}
@@ -157,7 +183,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
         </div>
       ): null}
 
-      <MentionInput mentionData={mentionData} onSubmit={sendMessage} disabled={disabled} />
+      <MentionInput
+        mentionData={mentionData}
+        onSubmit={(text, mentions, shared) => sendMessage(text, mentions, shared)}
+        disabled={disabled}
+        sharedMessage={sharedMessage}
+        onClearSharedMessage={() => setSharedMessage(null)}
+      />
     </div>
   );
 };

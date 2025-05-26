@@ -28,6 +28,7 @@ export const useInitializeApp = () => {
           await fetchAndStoreDocumentHierarchy(initData, dispatch);
 
           socket.on("refresh_required", async () => {
+            console.log("Refresh required");
             const refreshed = await fetchInitUserData();
             dispatch(setUserInitData(refreshed));
             joinChatRooms(socket, refreshed);

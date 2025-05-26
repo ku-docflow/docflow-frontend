@@ -26,11 +26,10 @@ export const submitSignUpForm = async ({
   const token = await firebaseUser.getIdToken();
 
   try {
+    await login({ first_name: firstName, last_name: lastName }, token);
     await changeName();
   } catch (err) {
     console.error("Error changing name:", err);
     alert("이름 변경에 실패했습니다. 바로 로그인으로 넘어갑니다.");
   }
-
-  await login({ first_name: firstName, last_name: lastName }, token);
 };
