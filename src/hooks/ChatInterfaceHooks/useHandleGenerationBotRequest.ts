@@ -3,6 +3,10 @@ import { generateDocument } from "../../api/gen-bot";
 import { Message } from "../../types/message";
 import { getSocket } from "../../services/socket";
 import { Peer, Team, User } from "../../types/user";
+import { fetchAndStoreDocumentHierarchy } from "../../utils/MainRenderUtils/fetchUtils";
+import { useDispatch } from "react-redux";
+import { fetchInitUserData } from "../../api/user";
+import { setUserInitData } from "../../store/slices/userSlice";
 
 export const useHandleGenerationBotRequest = (
   selectedMessageIds: number[],
@@ -17,6 +21,8 @@ export const useHandleGenerationBotRequest = (
   setQueryText: (v: string | null) => void,
   setSelectedMessageIds: (v: number[]) => void
 ) => {
+  const dispatch = useDispatch();
+
   const handleGenerationBotRequest = useCallback(async () => {
     if (!query || selectedMessageIds.length !== 2) return;
 
@@ -35,7 +41,7 @@ export const useHandleGenerationBotRequest = (
         {
           userId: "summarybot",
           displayName: "생성봇",
-          startIndex: 0, // 제대로된 index 반영하도록 설정
+          startIndex: 0,
           endIndex: 0,
         },
       ],
@@ -52,22 +58,42 @@ export const useHandleGenerationBotRequest = (
       });
     }
 
-    const result = await generateDocument({
-      chatroom_id: Number(chatRoomId),
-      first_msg_id,
-      last_msg_id,
-      user_query: query,
-      topic_id,
-    });
-
-    console.log("Document generation result:", result);
-
+    setGenerationBotTriggered(false);
     setSelectedMessageIds([]);
 
+    try {
+      const result = await generateDocument({
+        chatroom_id: Number(chatRoomId),
+        first_msg_id,
+        last_msg_id,
+        user_query: query,
+        topic_id,
+      });
+      console.log("Document generated successfully:", result);
+      const refreshed = await fetchInitUserData();
+      dispatch(setUserInitData(refreshed));
+      await fetchAndStoreDocumentHierarchy(refreshed, dispatch);
+    } catch (error) {
+      console.error("Error generating document:", error);
+      alert("문서 생성에 실패했습니다.");
+    }
+
     resetSelection();
-    setGenerationBotTriggered(false);
     setQueryText(null);
-  }, [selectedMessageIds, chatRoomId, currentUser, query, team, peer]);
+  }, [
+    selectedMessageIds,
+    chatRoomId,
+    currentUser,
+    query,
+    team,
+    peer,
+    dispatch,
+    resetSelection,
+    setGenerationBotTriggered,
+    setQueryText,
+    setSelectedMessageIds,
+    topic_id,
+  ]);
 
   return handleGenerationBotRequest;
 };

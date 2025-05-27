@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser, setLoading as setAuthLoading } from "./store/slices/authSlice";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
+import AuthPage from "./pages/AuthPage";
 import SignupPage from "./pages/SignupPage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import MainRenderPage from "./pages/MainRenderPage";
@@ -39,7 +39,7 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<AuthPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route
           path="/*"

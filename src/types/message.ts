@@ -43,13 +43,21 @@ interface MentionData {
   display: string;
 }
 
+export interface SharedMessageInfo {
+  text: string;
+  sender: {
+    id: string;
+    first_name: string;
+    last_name: string;
+    profile_image?: string;
+  };
+  id?: string;
+}
+
 export interface ChatBubbleProps {
-  message: string;
-  sender: Sender;
-  timestamp?: string;
+  message: Message;
   isCurrentUser: boolean;
   showProfile: boolean;
-  mentions?: Mention[];
   onProfileClick?: (sender: Sender) => void;
   isSelectable?: boolean;
   isSelected?: boolean;

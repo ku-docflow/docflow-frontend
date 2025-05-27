@@ -11,6 +11,7 @@ import { useStickyScroll } from "../../../hooks/ChatInterfaceHooks/useStickyScro
 import { useHandleGenerationBotRequest } from "../../../hooks/ChatInterfaceHooks/useHandleGenerationBotRequest";
 import { useHandleSendMessage } from "../../../hooks/ChatInterfaceHooks/useHandleSendMessage";
 import { useExtractTopicsOfOrgs } from "../../../hooks/ChatInterfaceHooks/useExtractTopicsOfOrgs";
+import { Message } from "../../../types/message";
 
 export interface MentionData {
   id: string;
@@ -23,15 +24,17 @@ interface ChatInterfaceProps {
 }
 
 const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
-  const chatRoomId = useResolveChatRoomId(team, peer); //retrieves chat room id for communication
+  const chatRoomId = useResolveChatRoomId(team, peer);
   const chatMessagesRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [generationBotTriggered, setGenerationBotTriggered] = useState(false);
-  const [selectedMessageIds, setSelectedMessageIds] = useState<number[]>([]); //선택된 메세지 id 저장할 구조체
-  const [querytext, setQueryText] = useState<string | null>(null); // 요약 요청 시 쿼리 텍스트 저장할 구조체
-  const [searchPending, setSearchPending] = useState(false); // 검색 요청 대기 상태 저장할 구조체
+  const [selectedMessageIds, setSelectedMessageIds] = useState<number[]>([]);
+  const [querytext, setQueryText] = useState<string | null>(null);
+  const [searchPending, setSearchPending] = useState(false);
   const [selectedTopicId, setSelectedTopicId] = useState<string | null>(null);
-  const isSearchBot = !team && !peer; // 검색봇인지 여부 확인
+  const [sharedMessage, setSharedMessage] = useState<Message | null>(null);
+  const [isAtBottom, setIsAtBottom] = useState(true);
+  const isSearchBot = !team && !peer;
 
   const allMessagesByRoom = useSelector((state: RootState) => state.messages);
   const messages = useMemo(() => {
@@ -46,16 +49,36 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
     )
   );
 
-  const mentionData = (team || peer)? createMentionData(peers, currentUser?.id) : null; // 검색봇 채팅의 경우, mention 기능을 차단
+  const mentionData = (team || peer) ? createMentionData(peers, currentUser?.id) : null;
 
   const { scrollToBottom, showNewMsgAlert } = useStickyScroll(messages, currentUser, chatMessagesRef, messagesEndRef);
+
+  const handleScroll = () => {
+    if (!chatMessagesRef.current) return;
+    const { scrollTop, scrollHeight, clientHeight } = chatMessagesRef.current;
+    const isBottom = Math.abs(scrollHeight - clientHeight - scrollTop) < 10;
+    setIsAtBottom(isBottom);
+  };
+
+  useEffect(() => {
+    const chatMessages = chatMessagesRef.current;
+    if (chatMessages) {
+      chatMessages.addEventListener('scroll', handleScroll);
+      return () => chatMessages.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
+
+  useEffect(() => {
+    if (isAtBottom) {
+      scrollToBottom();
+    }
+  }, [messages, isAtBottom]);
 
   const resetSelection = () => {
     setSelectedMessageIds([]);
   };
 
   const topics = useExtractTopicsOfOrgs();
-  // console.log("ChatInterface document topics: ", topics);
 
   const sendMessage = useHandleSendMessage(
     chatRoomId,
@@ -65,7 +88,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
     setGenerationBotTriggered,
     setQueryText,
     setSearchPending,
-    isSearchBot
   );
 
   const handleGenerationBotRequest = useHandleGenerationBotRequest(
@@ -81,6 +103,30 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
     setQueryText,
     setSelectedMessageIds
   );
+
+  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const data = e.dataTransfer.getData("application/json");
+    try {
+      const parsed = JSON.parse(data);
+      if (parsed.type === "shared_message") {
+        const tempMessage: Message = {
+          id: parsed.shared_message_id,
+          chatroom_id: chatRoomId,
+          type: "shared",
+          text: parsed.message,
+          sender: currentUser!,
+          mentions: [],
+          shared_message_id: parsed.shared_message_id,
+          shared_message_sender: parsed.sender,
+          timestamp: parsed.timestamp,
+        };
+        setSharedMessage(tempMessage);
+      }
+    } catch (err) {
+      console.error("Invalid dropped message format:", err);
+    }
+  };
   
   const disabled = (isSearchBot && searchPending) || generationBotTriggered;
 
@@ -93,7 +139,18 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
   }, [messages, searchPending, isSearchBot, currentUser]);
 
   return (
-    <div className={`chat-interface ${generationBotTriggered ? "selecting-mode" : ""}`} onDragOver={(e) => e.preventDefault()} onDrop={(e) => e.preventDefault()}>
+    <div
+      className={`chat-interface ${generationBotTriggered ? "selecting-mode" : ""}`}
+      onDragOver={(e) => e.preventDefault()}
+      onDrop={handleDrop}
+    >
+      <div className="chat-header">
+        <h1 className="chat-title">
+          {team ? team.name :
+            peer ? "DM: " + peer.first_name + " " + peer.last_name :
+              "검색봇"}
+        </h1>
+      </div>
       <div className="chat-messages" ref={chatMessagesRef}>
         {messages.map((msg, index) => {
           const prevMessage = messages[index - 1];
@@ -101,12 +158,9 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
           return (
             <ChatBubble
               key={msg.id}
-              message={msg.text}
-              sender={msg.sender}
-              timestamp={msg.timestamp}
+              message={msg}
               isCurrentUser={msg.sender.id === currentUser!.id}
               showProfile={showProfile}
-              mentions={msg.mentions}
               isSelectable={generationBotTriggered}
               isSelected={selectedMessageIds.includes(Number(msg.id))}
               onSelect={() => {
@@ -116,14 +170,13 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
                   setSelectedMessageIds([...selectedMessageIds, Number(msg.id)]);
                 }
               }}
-
             />
           );
         })}
         <div ref={messagesEndRef} />
       </div>
 
-      {showNewMsgAlert && (
+      {showNewMsgAlert && !isAtBottom && (
         <div className="new-message-alert" onClick={scrollToBottom}>
           새로운 메시지가 도착했습니다. 클릭하여 아래로 스크롤하세요.
         </div>
@@ -151,13 +204,26 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
           >
             문서 생성
           </button>
-          <button className="generate-button" onClick={() => { setGenerationBotTriggered(false); setSelectedMessageIds([]); setSelectedTopicId(null); }}>
+          <button 
+            className="generate-button" 
+            onClick={() => { 
+              setGenerationBotTriggered(false); 
+              setSelectedMessageIds([]); 
+              setSelectedTopicId(null); 
+            }}
+          >
             취소
           </button>
         </div>
       ): null}
 
-      <MentionInput mentionData={mentionData} onSubmit={sendMessage} disabled={disabled} />
+      <MentionInput
+        mentionData={mentionData}
+        onSubmit={(text, mentions, shared) => sendMessage(text, mentions, shared)}
+        disabled={disabled}
+        sharedMessage={sharedMessage}
+        onClearSharedMessage={() => setSharedMessage(null)}
+      />
     </div>
   );
 };

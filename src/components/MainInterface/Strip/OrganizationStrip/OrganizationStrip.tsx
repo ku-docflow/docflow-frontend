@@ -5,12 +5,13 @@ import { setSelectedOrg, resetSelection } from "../../../../store/slices/uiSlice
 import '../../../../styles/MainInterface/strips/OrganizationStrip/OrganizationStripButton.css';
 import '../../../../styles/MainInterface/strips/OrganizationStrip/OrganizationStrip.css';
 import Settings from '../../common/Settings';
-import { FaCog } from "react-icons/fa";
+import { FaCog, FaPlus } from "react-icons/fa";
 import { useOrganizationStrip } from "../../../../hooks/ChatInterfaceHooks/OrganizationStripHooks/useOrganizationStrip";
 
 const OrganizationStrip: React.FC = () => {
   const dispatch = useDispatch();
   const organizations = useSelector((state: RootState) => state.user.orgs || []);
+  const selectedOrg = useSelector((state: RootState) => state.ui.selectedOrg);
   const {
     isSettingsOpen,
     isAdding,
@@ -30,10 +31,10 @@ const OrganizationStrip: React.FC = () => {
     <div className="organization-strip-container">
       <div className="organization-strip-top">
         <button
-          className="OrganizationStripButton"
+          className={`OrganizationStripButton ${!selectedOrg ? 'selected' : ''}`}
           onClick={handleProfileClick}
         >
-          DM
+          <span className="btnText">DM</span>
         </button>
       </div>
 
@@ -41,10 +42,10 @@ const OrganizationStrip: React.FC = () => {
         {organizations.map((org) => (
           <button
             key={org.id}
-            className="OrganizationStripButton"
+            className={`OrganizationStripButton ${selectedOrg?.id === org.id ? 'selected' : ''}`}
             onClick={() => dispatch(setSelectedOrg(org))}
           >
-            {org.name.charAt(0)}
+            <span className="btnText">{org.name.charAt(0)}</span>
           </button>
         ))}
 
@@ -53,7 +54,7 @@ const OrganizationStrip: React.FC = () => {
             className="OrganizationStripButton"
             onClick={() => setIsAdding(true)}
           >
-            +
+            {FaPlus({ size: 14, color: "#fff" }) as ReactElement}
           </button>
         )}
 
@@ -77,7 +78,7 @@ const OrganizationStrip: React.FC = () => {
           className="OrganizationStripButton"
           onClick={() => setIsSettingsOpen(true)}
         >
-          {FaCog({ size: 24, color: "#444" }) as ReactElement}
+          {FaCog({ size: 24, color: "#fff" }) as ReactElement}
         </button>
       </div>
       {isSettingsOpen && (

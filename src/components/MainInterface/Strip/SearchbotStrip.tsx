@@ -4,12 +4,7 @@ import "../../../styles/MainInterface/strips/SearchbotStrip.css";
 
 const SearchbotStrip: React.FC = () => {
   return (
-    <div className="searchbot-strip">
-      <div className="searchbot-strip-header">
-          <h1 className="searchbot-strip-title">
-            검색봇
-          </h1>
-      </div>
+    <div className="chatroom-strip-container">
       <ChatInterface team={null} peer={null} />
     </div>
   );

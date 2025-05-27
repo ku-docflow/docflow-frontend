@@ -1,16 +1,22 @@
 .peer-strip {
-   padding: 1rem;
+   padding: 1.25rem 1.5rem;
    height: 100%;
    overflow-y: auto;
-   background-color: white;
-   color: black;
+   background-color: #fff;
+   color: #333;
+   border-radius: 18px;
+   box-shadow: 0 0 24px rgba(116, 148, 236, 0.08);
+   font-family: "Poppins", sans-serif;
  }
  
  .peer-strip-title {
-   font-size: 1.125rem;
-   font-weight: 600;
-   margin-bottom: 0.5rem;
-   border-bottom: 1px solid #ccc;
+   font-size: 1.1rem;
+   font-weight: 700;
+   margin-bottom: 1rem;
+   border-bottom: 1px solid #e9e9ef;
+   color: #7494ec;
+   padding-bottom: 0.5rem;
+   font-family: "Poppins", sans-serif;
  }
  
 .organization-list {

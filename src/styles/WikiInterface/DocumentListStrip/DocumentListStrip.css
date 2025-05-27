@@ -2,33 +2,42 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+    background: #ffffff;
+    padding: 1rem;
+    font-family: 'Inter', 'Roboto', sans-serif;
 }
 
 .document-list-strip h3 {
     font-size: 1.2rem;
+    color: #1e40af;
+    font-weight: 600;
+    margin: 0;
 }
 
 .document-list-strip-header {
     display: flex;
     justify-content: space-between;
     align-items: baseline;
-    border-bottom: 1px solid #ccc;
-    padding-bottom: 0.5rem;
-    margin-bottom: 0.5rem;
+    border-bottom: 1.5px solid #e3e8f7;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1rem;
 }
 
 .add-topic-button-icon {
     background: transparent;
-    color: rgb(74, 74, 74);
-    width: 24px;
-    height: 24px;
-    font-size: 16px;
+    color: #1e40af;
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
     cursor: pointer;
-    line-height: 24px;
+    line-height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    border-radius: 12px;
+    border: none;
+    transition: color 0.2s ease;
 }
 
 .add-topic-button-icon::after {
@@ -37,16 +46,17 @@
     top: 110%;
     left: 50%;
     transform: translateX(-50%);
-    background-color: black;
+    background-color: #1e40af;
     color: white;
     font-size: 12px;
-    padding: 2px 6px;
-    border-radius: 4px;
+    padding: 4px 8px;
+    border-radius: 6px;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease-in-out;
     z-index: 10;
+    font-weight: 500;
 }
 
 .add-topic-button-icon:hover::after {
@@ -54,19 +64,43 @@
 }
 
 .add-topic-button-icon:hover {
-    background-color: #f0f0f0;
-    border-radius: 50%;
-    transition: background-color 0.2s;
+    color: #7494ec;
 }
 
 .topic-list {
     margin-top: 0.5rem;
+    overflow-y: auto;
+    padding-right: 0.5rem;
+}
+
+.topic-list::-webkit-scrollbar {
+    width: 6px;
+}
+
+.topic-list::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 3px;
+}
+
+.topic-list::-webkit-scrollbar-thumb {
+    background: #b6cdfa;
+    border-radius: 3px;
+}
+
+.topic-list::-webkit-scrollbar-thumb:hover {
+    background: #7494ec;
 }
 
 .add-topic-input {
-    border: 1px solid black;
-    padding: 8px;
-    border-radius: 6px;
+    border: 1.5px solid #e3e8f7;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: #ffffff;
+    transition: border-color 0.2s ease;
+}
+
+.add-topic-input:focus-within {
+    border-color: #7494ec;
 }
 
 .add-topic-input input {
@@ -75,6 +109,13 @@
     outline: none;
     background: transparent;
     font-size: 14px;
+    color: #1e40af;
+    font-family: 'Inter', 'Roboto', sans-serif;
+    font-weight: 500;
+}
+
+.add-topic-input input::placeholder {
+    color: #94a3b8;
 }
 
 .document-list-strip ul {

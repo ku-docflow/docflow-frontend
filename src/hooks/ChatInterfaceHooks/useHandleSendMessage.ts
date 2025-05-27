@@ -13,23 +13,35 @@ export const useHandleSendMessage = (
   setSearchPending: (v: boolean) => void,
   isSearchBot?: boolean
 ) => {
-  const sendMessage = async (text: string, mentions: Mention[]) => {
+  const sendMessage = async (
+    text: string,
+    mentions: Mention[],
+    sharedMessage?: {
+      text: string;
+      sender: {
+        id: string;
+        first_name: string;
+        last_name: string;
+        profile_image?: string;
+      };
+      id?: string;
+    } | null
+  ) => {
     if (!text?.trim() || !currentUser) return;
 
     const newMessage: Message = {
       chatroom_id: chatRoomId,
-      type: "default",
+      type: sharedMessage ? "shared" : "default",
       text: text,
       sender: currentUser,
       mentions,
-      shared_message_id: null,
-      shared_message_sender: null,
+      shared_message_id: sharedMessage?.id ?? null,
+      shared_message_sender: sharedMessage?.sender ?? null,
     };
 
     if (mentions.some((m) => m.userId === "generationBot")) {
       setSummaryBotTriggered(true);
       setQueryText(text);
-      console.log("gen bot triggered with text:", text);
       return;
     }
 
