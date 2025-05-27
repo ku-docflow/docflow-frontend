@@ -23,13 +23,18 @@ const TopicBlock: React.FC<TopicBlockProps> = ({ topicBlock }) => {
     handleCreateDocument,
   } = useTopicBlock(topicBlock.topic.id);
 
+  const handleAddDocumentClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    handleCreateDocument();
+  };
+
   return (
     <div className={`TopicBlock ${expanded ? "expanded" : ""} ${isCollapsing ? "collapsing" : ""}`}>
       <div className="TopicBlock-header" onClick={toggleTopic}>
         <span>{topicBlock.topic.title}</span>
         <button
           className="add-document-button-icon"
-          onClick={handleCreateDocument}
+          onClick={handleAddDocumentClick}
           aria-label="Add Document"
         >
           +

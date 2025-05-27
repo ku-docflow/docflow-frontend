@@ -1,17 +1,16 @@
 .main-layout {
     display: flex;
     height: 100%;
+    background-color: #ffffff;
 }
 
 .org-strip {
     width: 4rem;
-    /* equivalent to Tailwind's w-16 */
     background-color: white;
-    color: black;
+    color: rgb(255, 255, 255);
     display: flex;
     flex-direction: column;
     align-items: center;
-    border-right: 1px solid black;
 }
 
 .channel-strip {

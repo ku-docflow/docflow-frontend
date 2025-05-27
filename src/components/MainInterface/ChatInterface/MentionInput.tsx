@@ -101,7 +101,7 @@ const MentionInput: React.FC<MentionInputProps> = ({
             <span>＋</span>
           </button>
           <button type="button" className="icon-btn emoji-btn" tabIndex={-1} aria-label="Emoji picker" onClick={() => setShowEmojiPicker(v => !v)}>
-            <span role="img" aria-label="emoji">😊</span>
+            <span role="img" aria-label="emoji">☻</span>
           </button>
         </div>
         <button
