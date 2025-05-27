@@ -9,6 +9,7 @@
     border-radius: 30px;
     box-shadow: 0 0 30px rgba(0, 0, 0, .2);
     padding: 1.5rem;
+    padding-bottom: 0px;
     animation: slideIn 0.4s ease-out;
 }
 
