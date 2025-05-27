@@ -64,7 +64,21 @@ const MentionInput: React.FC<MentionInputProps> = ({ mentionData, onSubmit, disa
         placeholder={placeholder}
         disabled={disabled}
       />
-      <button type="submit" className="chat-send-button" disabled={disabled}>{disabled? "···" : "↑"}</button>
+      <button 
+        type="submit" 
+        className="chat-send-button" 
+        disabled={disabled}
+      >
+        {disabled ? (
+          <div className="loading-indicator">
+            <div className="loading-dot"></div>
+            <div className="loading-dot"></div>
+            <div className="loading-dot"></div>
+          </div>
+        ) : (
+          "↑"
+        )}
+      </button>
 
       {isMentioning && (
         <div className="mentions-box">

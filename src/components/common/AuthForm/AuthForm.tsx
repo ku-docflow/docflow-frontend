@@ -4,6 +4,7 @@ import { useLoginForm } from '../../../hooks/common/LoginHooks/useLoginForm';
 import { useSignUpForm } from '../../../hooks/common/SignUpHooks/useSignUpForm';
 import { useFormValidation } from '../../../hooks/common/AuthHooks/useFormValidation';
 import { useShakeAnimation } from '../../../hooks/common/AuthHooks/useShakeAnimation';
+import { useSignupValidation } from '../../../hooks/common/AuthHooks/useSignupValidation';
 import '../../../styles/MainInterface/AuthForm.css';
 
 const Container = styled.div<{ isActive: boolean }>`
@@ -145,6 +146,9 @@ const TogglePanel = styled.div<{ position: 'left' | 'right'; isActive: boolean }
 
 const AuthForm: React.FC = () => {
   const [isActive, setIsActive] = useState(false);
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   // Login form hooks
   const {
@@ -188,10 +192,35 @@ const AuthForm: React.FC = () => {
   // Shake animation
   const isShaking = useShakeAnimation(!!loginError);
 
+  // Signup validation with visual feedback
+  const { emailError, passwordError, confirmPasswordError } = useSignupValidation(
+    signupEmail,
+    signupPassword,
+    confirmPass
+  );
+
   const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!isLoginValid) return;
     await handleLogin();
+  };
+
+  const togglePasswordVisibility = (
+    field: 'login' | 'signup' | 'confirm',
+    e: React.MouseEvent
+  ) => {
+    e.preventDefault();
+    switch (field) {
+      case 'login':
+        setShowLoginPassword(!showLoginPassword);
+        break;
+      case 'signup':
+        setShowSignupPassword(!showSignupPassword);
+        break;
+      case 'confirm':
+        setShowConfirmPassword(!showConfirmPassword);
+        break;
+    }
   };
 
   return (
@@ -215,7 +244,7 @@ const AuthForm: React.FC = () => {
             </div>
             <div className="input-box">
               <input
-                type="password"
+                type={showLoginPassword ? "text" : "password"}
                 name="password"
                 placeholder="비밀번호"
                 required
@@ -223,7 +252,11 @@ const AuthForm: React.FC = () => {
                 onChange={(e) => setLoginPassword(e.target.value)}
                 onKeyDown={handleLoginKeyDown}
               />
-              <i className='bx bxs-lock-alt'></i>
+              <i 
+                className={`bx ${showLoginPassword ? 'bxs-lock-open-alt' : 'bxs-lock-alt'}`}
+                onClick={(e) => togglePasswordVisibility('login', e)}
+                style={{ cursor: 'pointer' }}
+              ></i>
             </div>
             <div className="forgot-link">
               <a href="#">비밀번호를 잊으셨나요?</a>
@@ -275,30 +308,41 @@ const AuthForm: React.FC = () => {
                 required
                 value={signupEmail}
                 onChange={(e) => setSignupEmail(e.target.value)}
+                className={emailError ? 'error' : ''}
               />
               <i className='bx bxs-envelope'></i>
             </div>
             <div className="input-box">
               <input
-                type="password"
+                type={showSignupPassword ? "text" : "password"}
                 name="password"
                 placeholder="비밀번호"
                 required
                 value={signupPassword}
                 onChange={(e) => setSignupPassword(e.target.value)}
+                className={passwordError ? 'error' : ''}
               />
-              <i className='bx bxs-lock-alt'></i>
+              <i 
+                className={`bx ${showSignupPassword ? 'bxs-lock-open-alt' : 'bxs-lock-alt'}`}
+                onClick={(e) => togglePasswordVisibility('signup', e)}
+                style={{ cursor: 'pointer' }}
+              ></i>
             </div>
             <div className="input-box">
               <input
-                type="password"
+                type={showConfirmPassword ? "text" : "password"}
                 name="confirmPassword"
                 placeholder="비밀번호 확인"
                 required
                 value={confirmPass}
                 onChange={(e) => setConfirmPass(e.target.value)}
+                className={confirmPasswordError ? 'error' : ''}
               />
-              <i className='bx bxs-lock-alt'></i>
+              <i 
+                className={`bx ${showConfirmPassword ? 'bxs-lock-open-alt' : 'bxs-lock-alt'}`}
+                onClick={(e) => togglePasswordVisibility('confirm', e)}
+                style={{ cursor: 'pointer' }}
+              ></i>
             </div>
             <button 
               type="submit" 

@@ -73,11 +73,12 @@
   padding: 13px 50px 13px 20px;
   background: #eee;
   border-radius: 8px;
-  border: none;
+  border: 1px solid transparent;
   outline: none;
   font-size: 16px;
   color: #333;
   font-weight: 500;
+  transition: all 0.3s ease;
 }
 
 .auth-form-container .input-box input::placeholder {
@@ -184,4 +185,17 @@
   .auth-form-container .toggle-panel h1 {
     font-size: 30px;
   }
+}
+
+.input-box input.error {
+  border: 1px solid #ff3333;
+  background: #fff5f5;
+}
+
+.input-box input.error:focus {
+  box-shadow: 0 0 5px rgba(255, 51, 51, 0.3);
+}
+
+.input-box input.error::placeholder {
+  color: #ff6666;
 } 

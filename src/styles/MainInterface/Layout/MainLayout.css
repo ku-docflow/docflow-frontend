@@ -18,14 +18,16 @@
     width: 15rem;
     background-color: white;
     color: black;
-    border-right: 1px solid black;
 }
 
 .chat-area {
     flex: 1;
     background-color: white;
     color: black;
-    border-right: 1px solid black;
+    padding: 5px;
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* Prevents flex items from overflowing */
 }
 
 .chat-area-placeholder {
@@ -41,4 +43,47 @@
     /* equivalent to Tailwind's w-80 */
     background-color: white;
     color: black;
+    display: flex;
+    flex-direction: column;
+    min-width: 0; /* Prevents flex items from overflowing */
+    padding: 5px;
+    overflow: hidden; /* Add this to contain all children */
+}
+
+/* Resizer styles */
+.resizer {
+    width: 5px;
+    background-color: transparent;
+    cursor: col-resize;
+    transition: background-color 0.2s ease;
+}
+
+.resizer:hover,
+.resizer.active {
+    background-color: #7494ec;
+}
+
+/* Container for chat area and searchbot */
+.chat-container {
+    display: flex;
+    flex: 1;
+    min-width: 0; /* Prevents flex items from overflowing */
+    overflow: hidden; /* Add this to contain all children */
+}
+
+/* Ensure the chat interface container doesn't overflow */
+.chat-interface {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background-color: #ffffff;
+    transition: all 0.3s ease;
+    position: relative;
+    border-radius: 30px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, .2);
+    padding: 1.5rem;
+    animation: slideIn 0.4s ease-out;
+    width: 100%; /* Add this to ensure full width */
+    box-sizing: border-box; /* Add this to include padding in width calculation */
 }
