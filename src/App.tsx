@@ -13,8 +13,9 @@ function App() {
 
   useEffect(() => {
     const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    let unsubscribe: (() => void) | undefined;
 
+    unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       const first_name = firebaseUser?.displayName?.split(" ")[0] || "unknown";
       const last_name = firebaseUser?.displayName?.split(" ")[1] || "unknown";
 
@@ -33,7 +34,11 @@ function App() {
       dispatch(setAuthLoading(false));
     });
 
-    return () => unsubscribe();
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, [dispatch]);
 
   return (
