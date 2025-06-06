@@ -1,6 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../../store";
+import '../../../styles/WikiInterface/MarkdownStrip/MarkdownStrip.css';
+import { useMarkdownEditor } from "../../../hooks/WikiInterfaceHooks/useMarkdownStrip";
 import {
   MDXEditor,
   headingsPlugin,
@@ -17,9 +19,6 @@ import {
 if (process.env.NODE_ENV !== 'test') {
   require("@mdxeditor/editor/style.css");
 }
-
-import '../../../styles/WikiInterface/MarkdownStrip/MarkdownStrip.css';
-import { useMarkdownEditor } from "../../../hooks/WikiInterfaceHooks/useMarkdownStrip";
 
 const MarkdownStrip: React.FC = () => {
   const focusedDocument = useSelector((state: RootState) => state.ui.selectedDocument);
