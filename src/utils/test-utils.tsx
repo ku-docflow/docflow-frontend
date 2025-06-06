@@ -4,16 +4,22 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { BrowserRouter } from 'react-router-dom';
 
+type PreloadedState = Record<string, unknown>;
+
 function render(
   ui: React.ReactElement,
   {
-    preloadedState = {},
+    preloadedState,
     store = configureStore({
-      reducer: {},
-      preloadedState,
+      reducer: (state = {}) => state,
+      preloadedState: preloadedState || {},
     }),
     route = '/',
     ...renderOptions
+  }: {
+    preloadedState?: PreloadedState;
+    store?: ReturnType<typeof configureStore>;
+    route?: string;
   } = {}
 ) {
   function Wrapper({ children }: { children: React.ReactNode }) {
