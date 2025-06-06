@@ -22,6 +22,7 @@ export const useHandleChangeName = (
       if (setNewLastName) setNewLastName("");
     } catch (error) {
       console.error("Error changing name:", error);
+      throw error;
     }
   }, [newFirstName, newLastName, setNewFirstName, setNewLastName]);
   return handleChangeName;

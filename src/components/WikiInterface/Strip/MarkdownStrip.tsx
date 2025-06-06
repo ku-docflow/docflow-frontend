@@ -13,9 +13,13 @@ import {
   BoldItalicUnderlineToggles,
 } from "@mdxeditor/editor";
 
-import "@mdxeditor/editor/style.css";
+// Only import CSS in non-test environments
+if (process.env.NODE_ENV !== 'test') {
+  require("@mdxeditor/editor/style.css");
+}
+
 import '../../../styles/WikiInterface/MarkdownStrip/MarkdownStrip.css';
-import { useMarkdownEditor } from "../../../hooks/WikiInterfaceHooks/useMakrdownStrip";
+import { useMarkdownEditor } from "../../../hooks/WikiInterfaceHooks/useMarkdownStrip";
 
 const MarkdownStrip: React.FC = () => {
   const focusedDocument = useSelector((state: RootState) => state.ui.selectedDocument);

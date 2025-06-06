@@ -8,6 +8,7 @@
   justify-content: center;
   background: white;
   width: 100%;
+  border-radius: 10px;
 }
 
 .signup-card {
@@ -84,6 +85,7 @@
   list-style: none;
   padding: 0;
   counter-reset: step;
+  position: relative;
 }
 
 .progressbar li {
@@ -92,7 +94,8 @@
   font-size: 9px;
   position: relative;
   text-align: center;
-  color: white;
+  color: #7d7d7d;
+  transition: color 0.3s ease;
 }
 
 .progressbar li:before {
@@ -106,6 +109,7 @@
   background: white;
   border-radius: 3px;
   margin: 0 auto 5px auto;
+  transition: all 0.3s ease;
 }
 
 .progressbar li:after {
@@ -117,16 +121,24 @@
   left: -50%;
   top: 9px;
   z-index: -1;
+  transition: background 0.3s ease;
 }
 
 .progressbar li:first-child:after {
   content: none;
 }
 
-.progressbar li.active:before,
-.progressbar li.active:after {
+.progressbar li.active {
+  color: #27AE60;
+}
+
+.progressbar li.active:before {
   background: #27AE60;
   color: white;
+}
+
+.progressbar li.active:after {
+  background: #27AE60;
 }
 
 @keyframes fadeInUp {
@@ -143,4 +155,34 @@
 
 .fade-in-up {
   animation: fadeInUp 0.8s ease-out forwards;
+}
+
+@keyframes slideInRight {
+  from {
+    transform: translateX(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+
+fieldset {
+  animation: slideInRight 0.5s ease-out forwards;
+}
+
+fieldset.previous {
+  animation: slideInLeft 0.5s ease-out forwards;
 }

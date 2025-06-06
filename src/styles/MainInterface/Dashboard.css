@@ -1,25 +1,31 @@
 .dashboard {
-    padding: 1rem;
-    background-color: white;
-    color: black;
+    padding: 2rem 2.5rem;
+    background-color: #fff;
+    color: #333;
     height: 100%;
+    border-radius: 18px;
+    box-shadow: 0 0 24px rgba(116, 148, 236, 0.08);
+    font-family: "Poppins", sans-serif;
 }
 
 .dashboard-title {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    font-weight: bold;
-    border-bottom: 1px solid #ccc;
+    font-weight: 700;
+    border-bottom: 1px solid #e9e9ef;
+    color: #7494ec;
+    padding-bottom: 0.5rem;
+    font-family: "Poppins", sans-serif;
 }
 
 .dashboard-user-info {
     margin-top: 1.5rem;
-    padding: 1rem;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    background-color: #eaf8ff;
+    border-radius: 12px;
     max-width: 500px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 8px rgba(116, 148, 236, 0.05);
+    font-family: "Poppins", sans-serif;
 }
 
 .dashboard-user-info p {
@@ -28,5 +34,5 @@
 }
 
 .dashboard-user-info strong {
-    color: #333;
+    color: #7494ec;
 }

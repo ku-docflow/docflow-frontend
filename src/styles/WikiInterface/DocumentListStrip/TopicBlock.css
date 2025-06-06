@@ -1,33 +1,38 @@
 .TopicBlock {
     margin-bottom: 0.75rem;
-    transition: background-color 0.3s ease, all 0.3s ease-in-out;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
-    background-color: white;
-    color: black;
-    border: 1px solid black;
-    border-radius: 8px;
-    padding: 0.5rem;
+    background-color: #ffffff;
+    color: #1e40af;
+    border: 1.5px solid #e3e8f7;
+    border-radius: 12px;
+    padding: 0.75rem;
     position: relative;
     text-align: left;
     line-height: normal;
+    min-height: 48px;
 }
 
 .TopicBlock:hover {
-    background-color: #f7f7f7;
+    border-color: #b6cdfa;
+    box-shadow: 0 2px 8px rgba(30, 64, 175, 0.08);
 }
 
 .TopicBlock-header {
     display: flex;
     justify-content: space-between;
-    align-items: baseline;
+    align-items: center;
     cursor: pointer;
     position: relative;
-    color: black;
+    color: #1e40af;
+    font-weight: 600;
+    font-size: 1rem;
+    min-height: 28px;
 }
 
 .TopicBlock-content {
-    margin-top: 0.5rem;
-    transition: max-height 0.4s ease-in-out;
+    margin-top: 0.75rem;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
     max-height: 0;
 }
@@ -36,7 +41,7 @@
 .TopicBlock.expanded .TopicBlock-content {
     max-height: 1000px;
     opacity: 1;
-    padding-top: 0.4rem;
+    padding-top: 0.5rem;
 }
 
 .TopicBlock::after {
@@ -61,41 +66,47 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(38, 166, 154, 0.1);
+    background: rgba(30, 64, 175, 0.05);
     z-index: 1;
     pointer-events: none;
+    border-radius: 12px;
 }
 
 .add-document-button-icon {
     background: transparent;
-    color: rgb(74, 74, 74);
-    width: 24px;
-    height: 24px;
-    font-size: 16px;
+    color: #1e40af;
+    width: 28px;
+    height: 28px;
+    font-size: 20px;
     cursor: pointer;
-    line-height: 24px;
+    line-height: 28px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
+    border-radius: 12px;
+    border: none;
+    transition: color 0.2s ease;
+    flex-shrink: 0;
 }
 
 .add-document-button-icon::after {
-    content: "";
+    content: "새 문서";
     position: absolute;
     top: 110%;
     left: 50%;
     transform: translateX(-50%);
-    /*background-color: black;*/
+    background-color: #1e40af;
     color: white;
-    font-size: 10px;
-    padding: 2px 6px;
-    border-radius: 4px;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
     white-space: nowrap;
     opacity: 0;
     pointer-events: none;
     transition: opacity 0.2s ease-in-out;
     z-index: 10;
+    font-weight: 500;
 }
 
 .add-document-button-icon:hover::after {
@@ -103,7 +114,5 @@
 }
 
 .add-document-button-icon:hover {
-    background-color: #f0f0f0;
-    border-radius: 50%;
-    transition: background-color 0.2s;
+    color: #7494ec;
 }

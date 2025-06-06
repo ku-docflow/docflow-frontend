@@ -1,12 +1,14 @@
 import React from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setSelectedTeam } from "../../../../store/slices/uiSlice";
 import "../../../../styles/MainInterface/strips/ChatChannelStrip/ChatChannelStrip.css";
 import { useChatChannelStrip } from "../../../../hooks/ChatInterfaceHooks/ChatChannelStripHooks/useChatChannelStrip";
+import { RootState } from "../../../../store";
 
 const ChatChannelStrip: React.FC = () => {
   const dispatch = useDispatch();
   const context = useChatChannelStrip();
+  const selectedTeam = useSelector((state: RootState) => state.ui.selectedTeam)
   if (!context) return null;
 
   const {
@@ -30,7 +32,7 @@ const ChatChannelStrip: React.FC = () => {
         {org.teams.map((team) => (
           <li
             key={team.id}
-            className="chat-channel-item"
+            className={`chat-channel-item${selectedTeam && selectedTeam.id === team.id ? " selected" : ""}`}
             onClick={() => dispatch(setSelectedTeam(team))}
           >
             # {team.name}

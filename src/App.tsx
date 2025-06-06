@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setUser, setLoading as setAuthLoading } from "./store/slices/authSlice";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginPage from "./pages/LoginPage";
+import AuthPage from "./pages/AuthPage";
 import SignupPage from "./pages/SignupPage";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import MainRenderPage from "./pages/MainRenderPage";
@@ -13,8 +13,9 @@ function App() {
 
   useEffect(() => {
     const auth = getAuth();
-    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+    let unsubscribe: (() => void) | undefined;
 
+    unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
       const first_name = firebaseUser?.displayName?.split(" ")[0] || "unknown";
       const last_name = firebaseUser?.displayName?.split(" ")[1] || "unknown";
 
@@ -33,13 +34,17 @@ function App() {
       dispatch(setAuthLoading(false));
     });
 
-    return () => unsubscribe();
+    return () => {
+      if (unsubscribe) {
+        unsubscribe();
+      }
+    };
   }, [dispatch]);
 
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        <Route path="/login" element={<AuthPage />} />
         <Route path="/signup" element={<SignupPage />} />
         <Route
           path="/*"
