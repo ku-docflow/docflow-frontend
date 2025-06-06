@@ -15,7 +15,9 @@ export const useMarkdownEditor = (focusedDocument: Document | null) => {
         e.preventDefault();
         if (focusedDocument && editorRef.current) {
           const markdown = editorRef.current.getMarkdown();
-          updateDocument(focusedDocument.id, { text: markdown });
+          updateDocument(focusedDocument.id, { text: markdown }).catch(err => {
+            console.error("Failed to update document:", err);
+          });
         }
       }
     };
@@ -39,7 +41,9 @@ export const useMarkdownEditor = (focusedDocument: Document | null) => {
     timeoutRef.current = setTimeout(() => {
       if (!focusedDocument || !editorRef.current) return;
       const markdown = editorRef.current.getMarkdown();
-      updateDocument(focusedDocument.id, { text: markdown });
+      updateDocument(focusedDocument.id, { text: markdown }).catch(err => {
+        console.error("Failed to update document:", err);
+      });
     }, 5000);
   };
 
