@@ -2,6 +2,7 @@ import React from "react";
 import "../../../styles/MainInterface/common/ChatBubbles.css";
 import { ChatBubbleProps } from "../../../types/message"
 import { formatTimestamp } from "../../../utils/ChatInterfaceUtils/dateUtils";
+import ReactMarkdown from "react-markdown";
 
 const defaultProfileImage = "/maleprofile.png";
 
@@ -39,16 +40,19 @@ const BubbleContent: React.FC<ChatBubbleProps & { name: string }> = ({
         {(!isCurrentUser && showProfile) && (
           <div className="chat-bubble-sender">{name}</div>
         )}
-        {message.type === "shared" && message.shared_message_sender ? (
+        {message.type === "shared" && message.shared_message_sender && message.shared_message_text && (
           <div className="chat-bubble-shared-info">
             <div className="shared-sender-name">
               👤 {message.shared_message_sender.first_name} {message.shared_message_sender.last_name} 님이 공유한 메시지:
             </div>
-            <blockquote className="shared-message-text">"{message.text}"</blockquote>
+            <blockquote className="shared-message-text">
+              <ReactMarkdown>{message.shared_message_text}</ReactMarkdown>
+            </blockquote>
           </div>
-        ) : (
-          <div className="chat-bubble-message">{message.text}</div>
         )}
+          <div className="chat-bubble-message">
+            <ReactMarkdown>{message.text}</ReactMarkdown>
+          </div>
         {message.timestamp && (
           <div className="chat-bubble-timestamp">{formatTimestamp(message.timestamp)}</div>
         )}

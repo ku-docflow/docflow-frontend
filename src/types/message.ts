@@ -24,6 +24,7 @@ export interface Message {
     last_name: string;
     profile_image?: string;
   } | null;
+  shared_message_text?: string | null;
 }
 
 export interface Mention {
@@ -42,18 +43,6 @@ interface MentionData {
   id: string;
   display: string;
 }
-
-export interface SharedMessageInfo {
-  text: string;
-  sender: {
-    id: string;
-    first_name: string;
-    last_name: string;
-    profile_image?: string;
-  };
-  id?: string;
-}
-
 export interface ChatBubbleProps {
   message: Message;
   isCurrentUser: boolean;
