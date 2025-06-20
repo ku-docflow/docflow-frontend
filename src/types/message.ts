@@ -43,6 +43,7 @@ interface MentionData {
   id: string;
   display: string;
 }
+
 export interface ChatBubbleProps {
   message: Message;
   isCurrentUser: boolean;

@@ -49,8 +49,6 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
     )
   );
 
-  console.log("Messages for chatRoomId", chatRoomId, messages);
-
   const mentionData = (team || peer) ? createMentionData(peers, currentUser?.id) : null;
 
   const { scrollToBottom, showNewMsgAlert } = useStickyScroll(messages, currentUser, chatMessagesRef, messagesEndRef);
