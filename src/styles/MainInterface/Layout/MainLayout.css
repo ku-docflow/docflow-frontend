@@ -38,7 +38,7 @@
 }
 
 .searchbot-strip {
-    width: 20rem;
+    width: 25rem;
     /* equivalent to Tailwind's w-80 */
     background-color: white;
     color: black;

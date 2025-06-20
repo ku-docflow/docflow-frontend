@@ -119,6 +119,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
           mentions: [],
           shared_message_id: parsed.shared_message_id,
           shared_message_sender: parsed.sender,
+          shared_message_text: parsed.message,
           timestamp: parsed.timestamp,
         };
         setSharedMessage(tempMessage);
@@ -221,7 +222,11 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ team, peer }) => {
         mentionData={mentionData}
         onSubmit={(text, mentions, shared) => sendMessage(text, mentions, shared)}
         disabled={disabled}
-        sharedMessage={sharedMessage}
+        sharedMessage={sharedMessage ? {
+          id: sharedMessage.id || '',
+          sender: sharedMessage.shared_message_sender!,
+          text: sharedMessage.shared_message_text || sharedMessage.text
+        } : null}
         onClearSharedMessage={() => setSharedMessage(null)}
       />
     </div>
