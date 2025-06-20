@@ -1,13 +1,31 @@
 import React, { useRef, useState } from "react";
 import { useMentionInput } from "../../../hooks/ChatInterfaceHooks/useMentionInput";
-import { Mention, SharedMessageInfo } from "../../../types/message";
+import { Mention } from "../../../types/message";
 import "../../../styles/MainInterface/common/MentionInput.css";
 
 interface MentionInputProps {
   mentionData: Mention[] | null;
-  onSubmit: (message: string, mentions: Mention[], sharedMessage?: SharedMessageInfo | null) => void;
+  onSubmit: (message: string, mentions: Mention[], sharedMessage?: {
+    id: string;
+    sender: {
+      id: string;
+      first_name: string;
+      last_name: string;
+      profile_image?: string;
+    };
+    text: string;
+  } | null) => void;
   disabled: boolean;
-  sharedMessage?: SharedMessageInfo | null;
+  sharedMessage?: {
+    id: string;
+    sender: {
+      id: string;
+      first_name: string;
+      last_name: string;
+      profile_image?: string;
+    };
+    text: string;
+  } | null;
   onClearSharedMessage?: () => void;
 }
 

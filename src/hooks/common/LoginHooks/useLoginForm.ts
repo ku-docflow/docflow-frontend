@@ -6,6 +6,7 @@ import {
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../../../services/firebase";
+import { login } from "../../../api/auth";
 
 export const useLoginForm = () => {
   const [email, setEmail] = useState("");
@@ -16,7 +17,25 @@ export const useLoginForm = () => {
 
   const handleLogin = useCallback(async () => {
     try {
-      await signInWithEmailAndPassword(auth, email, password);
+      const userCredential = await signInWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
+      const idToken = await userCredential.user.getIdToken();
+
+      const emailParts = email.split("@")[0];
+      const firstName = emailParts.split(".")[0] || emailParts;
+      const lastName = emailParts.split(".")[1] || "";
+
+      await login(
+        {
+          first_name: firstName,
+          last_name: lastName,
+        },
+        idToken
+      );
+
       navigate("/");
     } catch (err: any) {
       setLoginError("로그인 실패: 이메일 또는 비밀번호를 확인해주세요.");
@@ -28,7 +47,21 @@ export const useLoginForm = () => {
   const handleGoogleLogin = useCallback(async () => {
     const provider = new GoogleAuthProvider();
     try {
-      await signInWithPopup(auth, provider);
+      const result = await signInWithPopup(auth, provider);
+      const idToken = await result.user.getIdToken();
+
+      const firstName = result.user.displayName?.split(" ")[0] || "";
+      const lastName =
+        result.user.displayName?.split(" ").slice(1).join(" ") || "";
+
+      await login(
+        {
+          first_name: firstName,
+          last_name: lastName,
+        },
+        idToken
+      );
+
       navigate("/");
     } catch (err) {
       setLoginError("Google 로그인 실패");

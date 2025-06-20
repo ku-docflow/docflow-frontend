@@ -37,6 +37,7 @@ export const useHandleSendMessage = (
       mentions,
       shared_message_id: sharedMessage?.id ?? null,
       shared_message_sender: sharedMessage?.sender ?? null,
+      shared_message_text: sharedMessage?.text ?? null,
     };
 
     if (mentions.some((m) => m.userId === "generationBot")) {
